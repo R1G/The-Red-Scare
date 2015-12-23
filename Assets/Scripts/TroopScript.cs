@@ -14,4 +14,11 @@ public class TroopScript : MonoBehaviour {
 		gameObject.tag = "SelectedTroop";
 		Debug.Log ("Selected");
 	}
+
+	void Update() {
+		if (transform.hasChanged) {
+			gameObject.tag = "FriendlyTroop";
+			transform.hasChanged = false;
+		}
+	}
 }

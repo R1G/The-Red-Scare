@@ -43,6 +43,5 @@ public class ClickableTile : MonoBehaviour {
 				gameObject.GetComponent<Light> ().enabled = false;
 			}
 		}
-		}
-
+	}
 }

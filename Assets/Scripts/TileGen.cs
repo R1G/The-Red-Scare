@@ -44,6 +44,8 @@ public class TileGen : MonoBehaviour {
 	}
 		//Replace with path-finding
 	public void MoveSelectedUnitTo(int x, int y) {
-		selectedUnit.transform.position = new Vector3 (x*2, 0, y*2);
+		if (selectedUnit != null) {
+			selectedUnit.transform.position = new Vector3 (x*2, 0, y*2);
+		}
 	}
 }
