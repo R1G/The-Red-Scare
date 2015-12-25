@@ -7,6 +7,7 @@ public class EnemyScript : MonoBehaviour {
 	public int enemyDamage;
 	GameObject playerTroop;
 
+
 	public float distanceX;
 	public float distanceZ;
 
