@@ -5,7 +5,8 @@ public class TileGenerator : MonoBehaviour {
 
 	int mapCol;
 	int mapRow;
-	TileType[] tileTypes;
+	//Tile[] tileTypes;
+	Quaternion tileRot = Quaternion.Euler(270, 0, 0);
 
 
 	int[,] tileMap = new int[,]
@@ -32,7 +33,6 @@ public class TileGenerator : MonoBehaviour {
 		"Grass_Slab"
 	};
 
-	// Use this for initialization
 	void Start () {
 		int mapCol = tileMap.GetUpperBound(1);
 		int mapRow = tileMap.GetUpperBound(0);
@@ -41,19 +41,12 @@ public class TileGenerator : MonoBehaviour {
 			for (int z = 0; z <= mapCol; z++) {
 				int tileIndex = tileMap[x, z];
 
-				// Get already created prefab from Unity and postition/rotate it
-				Vector3 tilePos = new Vector3 (x * 2, 0, z * 2);
-				Quaternion tileRot = Quaternion.Euler(270, 0, 0);
+				// Get already created prefab from Unity and position/rotate it
+				Vector3 tilePos = new Vector3 (x, 0, z);
+				GameObject prefab = Resources.Load(prefabResources[tileIndex]) as GameObject;
 
-				// Instantiate a new tile with this prefab
-				GameObject tilePrefabGameObject = Instantiate(Resources.Load(prefabResources[tileIndex]), tilePos, tileRot) as GameObject;
+				GameObject tilePrefabGameObject = Instantiate(prefab, tilePos, tileRot) as GameObject;
 			}
 		}
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }
