@@ -7,6 +7,7 @@
 !/ProjectSettings/
 !.gitignore
 
+ProjectSettings/ProjectVersion.txt
 # OS Stuff
 .DS_Store
 ._*
