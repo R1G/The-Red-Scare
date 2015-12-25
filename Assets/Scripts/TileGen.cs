@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class TileGen : MonoBehaviour {
 
@@ -15,7 +15,7 @@ public class TileGen : MonoBehaviour {
 
 		for (int x = 0; x < mapSizeX; x++) {
 			for(int y = 0; y < mapSizeY; y++){
-				tiles[x,y] = 0;
+				tiles[x,y] = Random.Range(0, 5);
 			}
 				//insert addition tile instructions here
 		}
@@ -32,7 +32,7 @@ public class TileGen : MonoBehaviour {
 			for (int y = 0; y < mapSizeY; y++) {
 
 				TileType tt = tileTypes [tiles [x, y]];
-				GameObject GO = (GameObject)Instantiate (tt.tileVisualPrefab, new Vector3 (x * 2, 0, y * 2), Quaternion.identity);
+				GameObject GO = (GameObject)Instantiate (tt.tileVisualPrefab, new Vector3 (x * 2, 0, y * 2), Quaternion.Euler(270,0,0));
 				ClickableTile ct = GO.GetComponent<ClickableTile> ();
 				//Used to define where the tile is in the array
 				ct.tileX = x;
