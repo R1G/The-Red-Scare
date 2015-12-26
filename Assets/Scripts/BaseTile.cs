@@ -3,45 +3,47 @@ using System.Collections;
 
 public class BaseTile : MonoBehaviour {
 
-	GameObject selectedTroop;
-	Collider tileClickBox;
-	public float travelRange = 6;
+	public GameObject selectedTroop;
 	public bool isWithinTravelRange;
-	
 
-	void Update() {
+	public void FindSelectedTroop() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
-
 	}
 
-	void CheckRange() {
-		float troopPositionX = selectedTroop.transform.position.x;
-		float troopPositionZ = selectedTroop.transform.position.z;
-
-		float tilePositionX = gameObject.transform.position.x;
-		float tilePositionZ = gameObject.transform.position.z;
-
-		float distanceX = Mathf.Abs(troopPositionX - tilePositionX);
-		float distanceZ = Mathf.Abs(troopPositionZ - tilePositionZ);
-
-		if (travelRange >= distanceX) {
-			if (travelRange >= distanceZ) {
-				isWithinTravelRange = true;
-			} 
-		}
-	}
-
-	void MoveSelectedTroop() {
-		selectedTroop.transform.position = gameObject.transform.position;
-	}
-
-	void OnMouseUp() {
+	public void CheckRange() {
 		if (selectedTroop != null) {
-			CheckRange(); 
-			if (isWithinTravelRange) {
-				MoveSelectedTroop();
-				selectedTroop.tag = "FriendlyTroop";
+			float troopPositionX = selectedTroop.transform.position.x;
+			float troopPositionZ = selectedTroop.transform.position.z;
+			
+			float tilePositionX = gameObject.transform.position.x;
+			float tilePositionZ = gameObject.transform.position.z;
+			
+			float distanceX = Mathf.Abs (troopPositionX - tilePositionX);
+			float distanceZ = Mathf.Abs (troopPositionZ - tilePositionZ);
+			
+			if (3 >= distanceX) {
+				if (3 >= distanceZ) {
+					isWithinTravelRange = true;
+				}  else {
+					isWithinTravelRange = false;
+				}
+			} else {
+				isWithinTravelRange = false;
 			}
 		}
+	}
+
+	public void MoveSelectedTroop() {
+		selectedTroop.transform.position = gameObject.transform.position;
+		selectedTroop.tag = "FriendlyTroop";
+		selectedTroop = null;
+	}
+
+	public void SetSelectedTileColor() {
+		gameObject.GetComponent<MeshRenderer> ().material.color = Color.green;
+	}
+
+	public void SetRegularTileColor() {
+		gameObject.GetComponent<MeshRenderer> ().material.color = Color.white;
 	}
 }
