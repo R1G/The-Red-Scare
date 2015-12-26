@@ -6,6 +6,9 @@ public class MasterTroopScript : MonoBehaviour {
 	int troopHealth;
 	int troopDamage;
 	float travelRange;
+	float attackRange;
+
+	GameObject enemyTroop;
 
 	void SetAsSelectedUnit() {
 		gameObject.tag = "SelectedTroop";
@@ -14,6 +17,4 @@ public class MasterTroopScript : MonoBehaviour {
 	void OnMouseUp() {
 		SetAsSelectedUnit ();
 	}
-
-
 }
