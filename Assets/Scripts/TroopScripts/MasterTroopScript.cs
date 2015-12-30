@@ -7,6 +7,7 @@ public class MasterTroopScript : MonoBehaviour {
 	int troopDamage;
 	float travelRange;
 	float attackRange;
+	bool isSelectedTroop;
 
 	GameObject enemyTroop;
 	public GameObject gameController;
@@ -18,10 +19,18 @@ public class MasterTroopScript : MonoBehaviour {
 	void SetAsSelectedUnit() {
 		if (gameController != null) {
 			gameObject.tag = "SelectedTroop";
+			isSelectedTroop = true;
 		}
 	}
 
 	void OnMouseUp() {
-		SetAsSelectedUnit ();
+		if (isSelectedTroop) {
+			gameObject.tag = "FriendlyTroop";
+			isSelectedTroop = false;
+		} else if (!isSelectedTroop) {
+			gameObject.tag = "SelectedTroop";
+			isSelectedTroop = true;
+		}
+
 	}
 }
