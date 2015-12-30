@@ -7,6 +7,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	int enemyDamage;
 	GameObject selectedTroop;
 	public bool isWithinAttackRange;
+	public GameObject gameController;
 
 	float playerX;
 	float playerZ;
@@ -44,9 +45,15 @@ public class MasterEnemyScript : MonoBehaviour {
 
 	void Update() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
+		gameController = GameObject.FindGameObjectWithTag ("EnemyTurn");
+		if (gameController != null) {
+			transform.Translate(0,0,1);
+			gameController.tag = "PlayerTurn";
+		}
+
 	}
 
-	void OnMouseDown() {
+	void OnMouseUp() {
 		if (selectedTroop != null) {
 			CheckAttackRange ();
 			if (isWithinAttackRange) {

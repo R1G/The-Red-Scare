@@ -5,6 +5,7 @@ public class BaseTile : MonoBehaviour {
 
 	public GameObject selectedTroop;
 	public bool isWithinTravelRange;
+	public GameObject gameController;
 
 	public void FindSelectedTroop() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
@@ -34,9 +35,13 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public void MoveSelectedTroop() {
-		selectedTroop.transform.position = gameObject.transform.position;
-		selectedTroop.tag = "FriendlyTroop";
-		selectedTroop = null;
+		gameController = GameObject.FindGameObjectWithTag ("PlayerTurn");
+		if (gameController != null) {
+			selectedTroop.transform.position = gameObject.transform.position;
+			selectedTroop.tag = "FriendlyTroop";
+			selectedTroop = null;
+			gameController.tag = "EnemyTurn";
+		}
 	}
 
 	public void SetSelectedTileColor() {

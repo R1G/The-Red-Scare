@@ -9,9 +9,16 @@ public class MasterTroopScript : MonoBehaviour {
 	float attackRange;
 
 	GameObject enemyTroop;
+	public GameObject gameController;
+
+	void Start() {
+		gameController = GameObject.FindGameObjectWithTag ("PlayerTurn");
+	}
 
 	void SetAsSelectedUnit() {
-		gameObject.tag = "SelectedTroop";
+		if (gameController != null) {
+			gameObject.tag = "SelectedTroop";
+		}
 	}
 
 	void OnMouseUp() {
