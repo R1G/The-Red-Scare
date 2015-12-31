@@ -7,6 +7,7 @@ public class BaseTile : MonoBehaviour {
 	public GameObject selectedTroop;
 	public bool isWithinTravelRange;
 	public GameObject gameController;
+	int travelRange = 3;
 
 	void Update() {
 		FindSelectedTroop ();
@@ -44,15 +45,10 @@ public class BaseTile : MonoBehaviour {
 			
 			float distanceX = Mathf.Abs (troopPositionX - tilePositionX);
 			float distanceZ = Mathf.Abs (troopPositionZ - tilePositionZ);
-			
-			if (3 >= distanceX) {
-				if (3 >= distanceZ) {
-					isWithinTravelRange = true;
-				}  else {
-					isWithinTravelRange = false;
-				}
-			} else {
-				isWithinTravelRange = false;
+
+			isWithinTravelRange = false;
+			if (distanceX <= travelRange && distanceZ <= travelRange) {
+				isWithinTravelRange = true;
 			}
 		}
 	}

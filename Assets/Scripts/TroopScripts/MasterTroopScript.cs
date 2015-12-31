@@ -19,16 +19,30 @@ public class MasterTroopScript : MonoBehaviour {
 	}
 
 	void SetAsSelectedUnit() {
-		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
-		if (GameScript.turn == "PlayerTurn") {
-			gameObject.tag = "SelectedTroop";
-			if(selectedTroop != null) {
-				GameScript.turn = "FriendlyTroop";
-			}
-		}
+		gameObject.tag = "SelectedTroop";
+	}
+
+	public void UnsetAsSelectedUnit () {
+		gameObject.tag = "FriendlyTroop";
 	}
 
 	void OnMouseUp() {
-		SetAsSelectedUnit ();
+		if (GameScript.turn != "PlayerTurn") {
+			return;
+		}
+
+		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
+
+		if (selectedTroop == null) {
+			SetAsSelectedUnit();
+		}
+
+		if (selectedTroop == gameObject) {
+			// the current object is selected
+			UnsetAsSelectedUnit();
+		} else {
+			// Some other friendly troop is selected
+			SetAsSelectedUnit();
+		}
 	}
 }
