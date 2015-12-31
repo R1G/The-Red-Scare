@@ -40,8 +40,8 @@ public class MasterTroopScript : MonoBehaviour {
 		if (selectedTroop == gameObject) {
 			// the current object is selected
 			UnsetAsSelectedUnit();
-		} else {
-			// Some other friendly troop is selected
+		} else if(selectedTroop != null) {
+			selectedTroop.tag = "FriendlyTroop";
 			SetAsSelectedUnit();
 		}
 	}
