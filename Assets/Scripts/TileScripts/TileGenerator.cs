@@ -46,7 +46,7 @@ public class TileGenerator : MonoBehaviour {
 				Vector3 tilePos = new Vector3 (x, 0, z);
 				GameObject prefab = Resources.Load(prefabResources[tileIndex]) as GameObject;
 
-				GameObject tilePrefabGameObject = Instantiate(prefab, tilePos, tileRot) as GameObject;
+				Instantiate(prefab, tilePos, tileRot);
 			}
 		}
 	}
