@@ -36,7 +36,7 @@ public class BaseTile : MonoBehaviour {
 
 	public void MoveSelectedTroop() {
 		gameController = GameObject.FindGameObjectWithTag ("PlayerTurn");
-		if (gameController != null) {
+		if (gameController != null && selectedTroop != null) {
 			selectedTroop.transform.position = gameObject.transform.position;
 			selectedTroop.tag = "FriendlyTroop";
 			selectedTroop = null;
