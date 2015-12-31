@@ -19,12 +19,11 @@ public class MasterTroopScript : MonoBehaviour {
 	}
 
 	void SetAsSelectedUnit() {
-		gameController = GameObject.FindGameObjectWithTag ("PlayerTurn");
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
-		if (gameController != null) {
+		if (GameScript.turn == "PlayerTurn") {
 			gameObject.tag = "SelectedTroop";
 			if(selectedTroop != null) {
-				selectedTroop.tag = "FriendlyTroop";
+				GameScript.turn = "FriendlyTroop";
 			}
 		}
 	}

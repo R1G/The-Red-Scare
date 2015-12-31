@@ -3,9 +3,6 @@ using System.Collections;
 
 public class GameScript : MonoBehaviour {
 
-	void Start () {
-		gameObject.tag = "PlayerTurn";
-	}
-
+	static public string turn = "PlayerTurn";
 
 }

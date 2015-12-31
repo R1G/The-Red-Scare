@@ -45,10 +45,9 @@ public class MasterEnemyScript : MonoBehaviour {
 
 	void Update() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
-		gameController = GameObject.FindGameObjectWithTag ("EnemyTurn");
-		if (gameController != null) {
+		if (GameScript.turn == "EnemyTurn") {
 			transform.Translate(0,0,1);
-			gameController.tag = "PlayerTurn";
+			GameScript.turn = "PlayerTurn";
 		}
 
 	}

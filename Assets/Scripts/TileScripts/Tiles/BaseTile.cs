@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class BaseTile : MonoBehaviour {
@@ -6,6 +7,28 @@ public class BaseTile : MonoBehaviour {
 	public GameObject selectedTroop;
 	public bool isWithinTravelRange;
 	public GameObject gameController;
+
+	void Update() {
+		FindSelectedTroop ();
+		if (selectedTroop != null) {
+			CheckRange ();
+			if (isWithinTravelRange) {
+				SetSelectedTileColor ();
+			} else {
+				SetRegularTileColor ();
+			}
+		} else {
+			SetRegularTileColor();
+		}
+	}
+	
+	void OnMouseUp() {
+		FindSelectedTroop ();
+		CheckRange ();
+		if (isWithinTravelRange) {
+			MoveSelectedTroop ();
+		} 
+	}
 
 	public void FindSelectedTroop() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
@@ -35,12 +58,11 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	public void MoveSelectedTroop() {
-		gameController = GameObject.FindGameObjectWithTag ("PlayerTurn");
-		if (gameController != null && selectedTroop != null) {
+		if (GameScript.turn == "PlayerTurn" && selectedTroop != null) {
 			selectedTroop.transform.position = gameObject.transform.position;
 			selectedTroop.tag = "FriendlyTroop";
 			selectedTroop = null;
-			gameController.tag = "EnemyTurn";
+			GameScript.turn = "EnemyTurn";
 		}
 	}
 
