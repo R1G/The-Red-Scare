@@ -8,20 +8,6 @@ public class BaseTile : MonoBehaviour {
 	public bool isWithinTravelRange;
 	public GameObject gameController;
 	int travelRange = 3;
-
-	void Update() {
-		FindSelectedTroop ();
-		if (selectedTroop != null) {
-			CheckRange ();
-			if (isWithinTravelRange) {
-				SetSelectedTileColor ();
-			} else {
-				SetRegularTileColor ();
-			}
-		} else {
-			SetRegularTileColor();
-		}
-	}
 	
 	void OnMouseUp() {
 		FindSelectedTroop ();
@@ -59,14 +45,7 @@ public class BaseTile : MonoBehaviour {
 			selectedTroop.tag = "FriendlyTroop";
 			selectedTroop = null;
 			GameScript.turn = "EnemyTurn";
+			TileGenerator.unhighlightTiles();
 		}
-	}
-
-	public void SetSelectedTileColor() {
-		gameObject.GetComponent<MeshRenderer> ().material.color = Color.green;
-	}
-
-	public void SetRegularTileColor() {
-		gameObject.GetComponent<MeshRenderer> ().material.color = Color.white;
 	}
 }
