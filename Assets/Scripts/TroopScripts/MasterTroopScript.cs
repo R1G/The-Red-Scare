@@ -20,10 +20,12 @@ public class MasterTroopScript : MonoBehaviour {
 
 	void SetAsSelectedUnit() {
 		gameObject.tag = "SelectedTroop";
+		TileGenerator.highlightTilesInRange((int)gameObject.transform.position.x, (int)gameObject.transform.position.z);
 	}
 
 	public void UnsetAsSelectedUnit () {
 		gameObject.tag = "FriendlyTroop";
+		TileGenerator.unhighlightTiles();
 	}
 
 	void OnMouseUp() {
