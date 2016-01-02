@@ -111,15 +111,12 @@ public class TileGenerator : MonoBehaviour {
 	};
 
 	void Start () {
-<<<<<<< HEAD
-		int mapCol = tileMap.GetUpperBound(1);
-		int mapRow = tileMap.GetUpperBound(0);
-=======
-		int mapRow = tileMap.GetUpperBound(0) + 1;
-		int mapCol = tileMap.GetUpperBound(1) + 1;
+
+		mapRow = tileMap.GetUpperBound(0) + 1;
+		mapCol = tileMap.GetUpperBound(1) + 1;
 
 		tilesRef = new GameObject[mapRow, mapCol];
->>>>>>> 2b541dc585ddd82227e911e06e1f485a930b3bd5
+
 
 		for (int x = 0; x < mapRow; x++) {
 			for (int z = 0; z < mapCol; z++) {
