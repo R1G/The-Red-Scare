@@ -91,11 +91,11 @@ public class TileGenerator : MonoBehaviour {
 		{0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0 ,0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0 ,0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0 ,0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0 ,0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0 ,0 ,0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0}
 	};
 
 	// Prefab resources
-	string[] prefabResources = new string[6] {
+	public string[] prefabResources = new string[6] {
 		"Dirt_Block",
 		"Dirt_Ramp",
 		"Dirt_Slab",
@@ -107,8 +107,6 @@ public class TileGenerator : MonoBehaviour {
 	void Start () {
 		int mapCol = tileMap.GetUpperBound(1);
 		int mapRow = tileMap.GetUpperBound(0);
-		Debug.Log (mapCol);
-		Debug.Log (mapRow);
 
 		for (int x = 0; x <= mapRow; x++) {
 			for (int z = 0; z <= mapCol; z++) {
