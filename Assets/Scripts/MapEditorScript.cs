@@ -29,8 +29,10 @@ public class MapEditorScript : MonoBehaviour {
 
 	void ConvertMapToString() {
 		for (int x = 0; x < 10; x++) {
+			mapInfo.WriteLine(" ");
 			for(int y = 0; y < 10; y++) {
-				mapInfo.WriteLine(editorTileField[x,y].ToString());
+				mapInfo.Write(editorTileField[x,y].ToString());
+
 			}
 		}
 	}
