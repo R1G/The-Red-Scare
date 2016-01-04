@@ -1,11 +1,11 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class TileGenerator : MonoBehaviour {
 
-	int mapCol;
-	int mapRow;
+	public static int mapCol;
+	public static int mapRow;
 
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
 	public static int range = 3;
@@ -111,7 +111,6 @@ public class TileGenerator : MonoBehaviour {
 	};
 
 	void Start () {
-
 		mapRow = tileMap.GetUpperBound(0) + 1;
 		mapCol = tileMap.GetUpperBound(1) + 1;
 
