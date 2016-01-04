@@ -23,7 +23,10 @@ public class CameraScript : MonoBehaviour {
 
 		if (xPos > TileGenerator.mapRow) xPos = TileGenerator.mapRow;
 		if (zPos > TileGenerator.mapCol) zPos = TileGenerator.mapCol;
-			
-		transform.position = new Vector3(xPos, yPos, zPos);
+
+		// Update the position if need be
+		if (xPos != transform.position.x || zPos != transform.position.z) {
+			transform.position = new Vector3(xPos, yPos, zPos);
+		}
 	}
 }
