@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,10 +6,9 @@ using System.Linq;
 
 public class TileGenerator : MonoBehaviour {
 
-	int mapCol;
-	int mapRow;
-
-	int[,] spaces;
+	public static int mapCol;
+	public static int mapRow;
+	public TextAsset mapInfo;
 
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
 	public static int range = 3;
@@ -19,8 +18,7 @@ public class TileGenerator : MonoBehaviour {
 	Quaternion tileRot = Quaternion.Euler(270, 0, 0);
 	
 	// Prefab resources
-	public string[] prefabResources = new string[7] {
-		"Empty_Tile",
+	public string[] prefabResources = new string[6] {
 		"Dirt_Block",
 		"Dirt_Ramp",
 		"Dirt_Slab",
@@ -29,7 +27,9 @@ public class TileGenerator : MonoBehaviour {
 		"Grass_Slab"
 	};
 
-	int[,] tileMap = new int[25,25];
+	int[,] tileMap = new int[,] {
+
+	};
 
 	void Start () {
 
@@ -87,26 +87,5 @@ public class TileGenerator : MonoBehaviour {
 			}
 			highlightedTiles.Clear();
 		}
-	}
-
-	private int[,] ParseFile(string filePath) {
-		
-		string input = System.IO.File.ReadAllText (filePath);
-		string[] lines = input.Split (new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-		int[,] spaces = new int[lines.Length, 10];
-		
-		for (int i = 0; i < lines.Length; i++) {
-			string st = lines[i];
-			string[] nums = st.Split(new[] { ',' });
-			for (int j = 0; j < Mathf.Min (nums.Length, 10); j++) {
-				int val;
-				if (int.TryParse (nums[j], out val))
-					spaces[i,j] = val;
-				else
-					spaces[i,j] = 0;
-				
-			}
-		}
-		return spaces;
 	}
 }
