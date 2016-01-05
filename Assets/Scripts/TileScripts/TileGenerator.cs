@@ -8,10 +8,7 @@ public class TileGenerator : MonoBehaviour {
 
 	public static int mapCol;
 	public static int mapRow;
-<<<<<<< HEAD
 	public TextAsset mapInfo;
-=======
->>>>>>> eac33e90e90eb972abd70bea290b7da9bb215917
 
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
 	public static int range = 3;
@@ -30,9 +27,7 @@ public class TileGenerator : MonoBehaviour {
 		"Grass_Slab"
 	};
 
-	int[,] tileMap = new int[,] {
-
-	};
+	int[,] tileMap = new int[100, 100];
 
 	void Start () {
 		mapRow = tileMap.GetUpperBound(0) + 1;
