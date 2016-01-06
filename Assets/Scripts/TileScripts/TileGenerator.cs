@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 public class TileGenerator : MonoBehaviour {
 
@@ -27,9 +26,13 @@ public class TileGenerator : MonoBehaviour {
 		"Grass_Slab"
 	};
 
-	int[,] tileMap = new int[100, 100];
+	int[,] tileMap = new int[10,10];
 
 	void Start () {
+		TextToArray (mapInfo);
+		mapInfo = GetComponent<TextAsset> ();
+		tileMap = new int[,]{};
+
 		mapRow = tileMap.GetUpperBound(0) + 1;
 		mapCol = tileMap.GetUpperBound(1) + 1;
 
@@ -85,4 +88,19 @@ public class TileGenerator : MonoBehaviour {
 			highlightedTiles.Clear();
 		}
 	}
+
+	void TextToArray(TextAsset file) {
+			string text = file.text;
+			char[] numberChars = text.ToCharArray ();
+			for (int x = 0; x < 10; x++) {
+				for(int y = 0; y < 10; y++) {
+					int tileNumber = x*10 + y;
+					if (numberChars[tileNumber] == '0') {
+						tileMap[x,y] = 0;
+					} else {
+						tileMap[x,y] = 0;
+					}
+				}
+			}
+		}
 }
