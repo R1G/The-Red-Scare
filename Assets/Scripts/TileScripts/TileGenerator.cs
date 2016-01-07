@@ -29,9 +29,7 @@ public class TileGenerator : MonoBehaviour {
 	int[,] tileMap = new int[10,10];
 
 	void Start () {
-		TextToArray (mapInfo);
 		mapInfo = GetComponent<TextAsset> ();
-		tileMap = new int[,]{};
 
 		mapRow = tileMap.GetUpperBound(0) + 1;
 		mapCol = tileMap.GetUpperBound(1) + 1;
@@ -89,18 +87,5 @@ public class TileGenerator : MonoBehaviour {
 		}
 	}
 
-	void TextToArray(TextAsset file) {
-			string text = file.text;
-			char[] numberChars = text.ToCharArray ();
-			for (int x = 0; x < 10; x++) {
-				for(int y = 0; y < 10; y++) {
-					int tileNumber = x*10 + y;
-					if (numberChars[tileNumber] == '0') {
-						tileMap[x,y] = 0;
-					} else {
-						tileMap[x,y] = 0;
-					}
-				}
-			}
-		}
+
 }

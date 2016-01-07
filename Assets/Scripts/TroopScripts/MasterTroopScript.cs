@@ -9,7 +9,6 @@ public class MasterTroopScript : MonoBehaviour {
 	float attackRange;
 	bool isSelectedTroop;
 
-
 	GameObject enemyTroop;
 	public GameObject gameController;
 	public GameObject selectedTroop;

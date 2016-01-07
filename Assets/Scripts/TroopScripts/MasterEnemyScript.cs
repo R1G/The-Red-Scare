@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class MasterEnemyScript : MonoBehaviour {
+	
 
 	int enemyHealth;
 	int enemyDamage;
