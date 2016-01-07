@@ -6,6 +6,7 @@ using System.Collections.Generic;
 //The pathfinding could get pretty complicated eventually, so it might be good to keep it seperate
 
 public class MasterEnemyScript : MonoBehaviour {
+	
 
 	int enemyHealth;
 	int enemyDamage;

@@ -10,7 +10,6 @@ public class MasterTroopScript : MonoBehaviour   {
 	bool isSelectedTroop;
 	Vector3 originalPos;
 
-
 	GameObject enemyTroop;
 	public GameObject gameController;
 	public GameObject selectedTroop;

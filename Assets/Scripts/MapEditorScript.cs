@@ -10,9 +10,7 @@ public class MapEditorScript : MonoBehaviour {
 	int mapArraySizeY;
 	StreamWriter mapInfo;
 
-	public static int[,] editorTileField = new int[,] {
-
-	};
+	public static int[,] editorTileField = new int[,] {};
 
 
 	void Start() {
