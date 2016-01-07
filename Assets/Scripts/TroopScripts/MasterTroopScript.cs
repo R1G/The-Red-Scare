@@ -1,22 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MasterTroopScript : MonoBehaviour {
+public class MasterTroopScript : MonoBehaviour   {
 	
 	int troopHealth;
 	int troopDamage;
 	float travelRange;
 	float attackRange;
 	bool isSelectedTroop;
+	Vector3 originalPos;
 
 
 	GameObject enemyTroop;
 	public GameObject gameController;
 	public GameObject selectedTroop;
 
+
+	private string identifier;
+
 	void Start() {
 		gameObject.tag = "FriendlyTroop";
+		assignIdentifier ();
+		MasterEnemyScript.addFriendlyPos (identifier, transform.position);
+		originalPos = gameObject.transform.position;
 	}
+
+	void Update() {
+		//If the first logged position does not equal the current position of the unit, then it has moved
+		if (originalPos != gameObject.transform.position) {
+			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
+		}
+	}
+
+
 
 	void SetAsSelectedUnit() {
 		gameObject.tag = "SelectedTroop";
@@ -30,6 +46,7 @@ public class MasterTroopScript : MonoBehaviour {
 
 	void OnMouseUp() {
 		if (GameScript.turn != "PlayerTurn") {
+			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 			return;
 		}
 
@@ -45,6 +62,17 @@ public class MasterTroopScript : MonoBehaviour {
 		} else if(selectedTroop != null) {
 			selectedTroop.tag = "FriendlyTroop";
 			SetAsSelectedUnit();
+
 		}
 	}
+
+	private void assignIdentifier() {
+		identifier = this.gameObject.name;
+
+	}
+
+
+
+
+
 }
