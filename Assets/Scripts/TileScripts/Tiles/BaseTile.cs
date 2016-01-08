@@ -46,6 +46,7 @@ public class BaseTile : MonoBehaviour {
 			selectedTroop = null;
 			GameScript.turn = "EnemyTurn";
 			TileGenerator.unhighlightTiles();
+
 		}
 	}
 }
