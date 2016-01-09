@@ -26,10 +26,9 @@ public class TileGenerator : MonoBehaviour {
 		"Grass_Slab"
 	};
 
-	int[,] tileMap = new int[10,10];
+	int[,] tileMap = new int[15,15];
 
 	void Start () {
-		mapInfo = GetComponent<TextAsset> ();
 
 		mapRow = tileMap.GetUpperBound(0) + 1;
 		mapCol = tileMap.GetUpperBound(1) + 1;
@@ -40,7 +39,6 @@ public class TileGenerator : MonoBehaviour {
 		for (int x = 0; x < mapRow; x++) {
 			for (int z = 0; z < mapCol; z++) {
 				int tileIndex = tileMap[x, z];
-
 				// Get already created prefab from Unity and position/rotate it
 				Vector3 tilePos = new Vector3 (x, 0, z);
 				GameObject prefab = Resources.Load(prefabResources[tileIndex]) as GameObject;
@@ -61,7 +59,11 @@ public class TileGenerator : MonoBehaviour {
 			lowerBoundRow = 0;
 		}
 
-		int upperBoundRow = x + range + 1;
+		int upperBoundRow = x + range; 
+		if (upperBoundRow > mapRow) {
+			upperBoundRow = mapRow;
+		}
+
 
 		int lowerBoundCol = z - range;
 		if (lowerBoundCol < 0) {
@@ -70,10 +72,19 @@ public class TileGenerator : MonoBehaviour {
 
 		int upperBoundCol = z + range + 1;
 
-		for(int r = lowerBoundRow; r < upperBoundRow; r++) {
-			for(int c = lowerBoundCol; c < upperBoundCol; c++) {
-				tilesRef[r, c].GetComponent<MeshRenderer> ().material.color = Color.green;
-				highlightedTiles.Add(tilesRef[r, c]);
+		if (upperBoundCol > mapCol) {
+		upperBoundCol = mapCol;
+		}
+
+
+		for (int r = lowerBoundRow; r <= upperBoundRow; r++) {
+			if(mapCol -r > 0) {
+			for (int c = lowerBoundCol; c < upperBoundCol; c++) {
+				if (mapCol - c > 0) {
+					tilesRef [r, c].GetComponent<MeshRenderer> ().material.color = Color.green;
+					highlightedTiles.Add (tilesRef [r, c]);
+					}
+				}
 			}
 		}
 	}
