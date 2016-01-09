@@ -13,6 +13,8 @@ public class MasterEnemyScript : MonoBehaviour {
 	GameObject selectedTroop;
 	public bool isWithinAttackRange;
 	public GameObject gameController;
+	static int nEnemies;
+	static int nMoved;
 
 	float playerX;
 	float playerZ;
@@ -28,6 +30,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	void Start() {
 		enemyHealth = 10;
 		enemyDamage = 10;
+		nEnemies++;
 	}
 
 	void CheckAttackRange() {
@@ -64,7 +67,12 @@ public class MasterEnemyScript : MonoBehaviour {
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
 				transform.Translate(movement);
 			}
-			GameScript.turn = "PlayerTurn";
+			nMoved++;
+			if(allEnemiesHaveMoved() == true) {
+				GameScript.turn = "PlayerTurn";
+				nMoved = 0;
+			}
+			Debug.Log(GameScript.turn);
 		}
 
 	}
@@ -161,6 +169,14 @@ public class MasterEnemyScript : MonoBehaviour {
 		} 
 
 		return vect;
+	}
+
+	private bool allEnemiesHaveMoved() {
+		if (nEnemies == nMoved) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
