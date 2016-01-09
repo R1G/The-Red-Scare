@@ -28,6 +28,8 @@ public class MasterTroopScript : MonoBehaviour   {
 		//If the first logged position does not equal the current position of the unit, then it has moved
 		if (originalPos != gameObject.transform.position) {
 			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
+			originalPos = gameObject.transform.position;
+
 		}
 	}
 
