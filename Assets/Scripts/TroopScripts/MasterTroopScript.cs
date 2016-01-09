@@ -50,7 +50,7 @@ public class MasterTroopScript : MonoBehaviour   {
 		}
 
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
-
+	
 		if (selectedTroop == null) {
 			SetAsSelectedUnit();
 		}
@@ -66,12 +66,7 @@ public class MasterTroopScript : MonoBehaviour   {
 	}
 
 	private void assignIdentifier() {
-		identifier = this.gameObject.name;
+		identifier = gameObject.name;
 
 	}
-
-
-
-
-
 }
