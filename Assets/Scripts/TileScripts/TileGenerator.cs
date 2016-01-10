@@ -17,16 +17,25 @@ public class TileGenerator : MonoBehaviour {
 	Quaternion tileRot = Quaternion.Euler(270, 0, 0);
 	
 	// Prefab resources
-	public string[] prefabResources = new string[6] {
+	public string[] prefabResources = new string[4] {
 		"Dirt_Block",
-		"Dirt_Ramp",
 		"Dirt_Slab",
-		"Grass_Block",
-		"Grass_Ramp",
-		"Grass_Slab"
+		"Rock_Block",
+		"Rock_Slab"
 	};
 
-	int[,] tileMap = new int[15,15];
+	int[,] tileMap = new int[,] {
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0},
+		{2,2,2,2,2,2,2,2,2,2},
+		{2,2,2,2,2,2,2,2,2,2},
+		{2,2,2,2,2,2,2,2,2,2},
+		{2,2,2,2,2,2,2,2,2,2},
+		{2,2,2,2,2,2,2,2,2,2}
+	};
 
 	void Start () {
 
