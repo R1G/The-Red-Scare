@@ -44,7 +44,7 @@ public class BaseTile : MonoBehaviour {
 			selectedTroop.transform.position = gameObject.transform.position;
 			selectedTroop.tag = "FriendlyTroop";
 			selectedTroop = null;
-			GameScript.turn = "EnemyTurn";
+
 			TileGenerator.unhighlightTiles();
 
 		}

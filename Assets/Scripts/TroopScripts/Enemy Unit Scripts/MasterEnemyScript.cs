@@ -33,7 +33,7 @@ public class MasterEnemyScript : MonoBehaviour {
 		nEnemies++;
 	}
 
-	void CheckAttackRange() {
+	private void CheckAttackRange() {
 		playerX = selectedTroop.transform.position.x;
 		playerZ = selectedTroop.transform.position.z;
 
@@ -51,7 +51,7 @@ public class MasterEnemyScript : MonoBehaviour {
 		}
 	}
 
-	void EnemyDeath() {
+	private void EnemyDeath() {
 		if (enemyHealth <= 0) {
 			Destroy(gameObject);
 		}
@@ -72,7 +72,6 @@ public class MasterEnemyScript : MonoBehaviour {
 				GameScript.turn = "PlayerTurn";
 				nMoved = 0;
 			}
-			Debug.Log(GameScript.turn);
 		}
 
 	}

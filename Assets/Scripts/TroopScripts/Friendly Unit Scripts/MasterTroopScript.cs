@@ -29,6 +29,7 @@ public class MasterTroopScript : MonoBehaviour   {
 		if (originalPos != gameObject.transform.position) {
 			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 			originalPos = gameObject.transform.position;
+			GameScript.turn = "EnemyTurn";
 
 		}
 	}
