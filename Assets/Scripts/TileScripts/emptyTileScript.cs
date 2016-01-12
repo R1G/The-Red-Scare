@@ -7,7 +7,7 @@ public class emptyTileScript : MonoBehaviour {
 
 	void OnMouseDown() {
 		tilePosition = gameObject.transform.position;
-		GameObject selectedTile = Instantiate (Resources.Load ("Grass_Block"), tilePosition, Quaternion.identity) as GameObject;
+		Instantiate (Resources.Load ("Grass_Block"), tilePosition, Quaternion.identity);
 
 		MapEditorScript.editorTileField [(int)tilePosition.x, (int)tilePosition.y] = 1;
 	}
