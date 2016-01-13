@@ -13,9 +13,15 @@ public class TileGenerator : MonoBehaviour {
 	public static int range = 3;
 	public static List<GameObject> highlightedTiles = new List<GameObject>(); // Holds a reference to every highlighted tile
 
-	//Tile[] tileTypes;
 	Quaternion tileRot = Quaternion.Euler(270, 0, 0);
-	
+
+	string[] tileTypes = new string[] {
+		"FF9900",	// Dirt_Block
+		"000000",	// unassigned
+		"FF0000",	// Rock_Block
+		"000000"	// unassigned
+	};
+
 	// Prefab resources
 	public string[] prefabResources = new string[4] {
 		"Dirt_Block",
@@ -24,37 +30,31 @@ public class TileGenerator : MonoBehaviour {
 		"Rock_Slab"
 	};
 
-	int[,] tileMap = new int[,] {
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0,0},
-		{2,2,2,2,2,2,2,2,2,2},
-		{2,2,2,2,2,2,2,2,2,2},
-		{2,2,2,2,2,2,2,2,2,2},
-		{2,2,2,2,2,2,2,2,2,2},
-		{2,2,2,2,2,2,2,2,2,2}
-	};
-
 	void Start () {
+		// Load an image of a map and use its pixels as the array
+		Texture2D levelBitmap = Resources.Load("map") as Texture2D;
+		mapRow = levelBitmap.height;
+		mapCol = levelBitmap.width;
 
-		mapRow = tileMap.GetUpperBound(0) + 1;
-		mapCol = tileMap.GetUpperBound(1) + 1;
-
+		// Hold a reference to every instantiated tile in a new game object
 		tilesRef = new GameObject[mapRow, mapCol];
 
-
+		// Loop throw the pixels and draw the map based on each pixel's color
 		for (int x = 0; x < mapRow; x++) {
 			for (int z = 0; z < mapCol; z++) {
-				int tileIndex = tileMap[x, z];
-				// Get already created prefab from Unity and position/rotate it
+				// Get the color of the current pixel
+				Color c = levelBitmap.GetPixel(z, x);
+
+				// Convert the color (which will be RGB) to it's hex value
+				string hex = ColorUtility.ToHtmlStringRGB(c);
+
+				// Obtain a tile index from tile types to get it's prefab resource
+				int tileIndex = System.Array.IndexOf(tileTypes, hex);
 				Vector3 tilePos = new Vector3 (x, 0, z);
 				GameObject prefab = Resources.Load(prefabResources[tileIndex]) as GameObject;
 
 				// Instantiate a tile and store it in the tiles ref for later use
-				GameObject tile = Instantiate(prefab, tilePos, tileRot) as GameObject;
-				tilesRef[x, z] = tile;
+				tilesRef[x, z] = Instantiate(prefab, tilePos, tileRot) as GameObject;
 			}
 		}
 	}
