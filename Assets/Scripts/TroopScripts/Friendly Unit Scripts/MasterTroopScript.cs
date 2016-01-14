@@ -3,8 +3,9 @@ using System.Collections;
 
 public class MasterTroopScript : MonoBehaviour   {
 	
-	int troopHealth;
-	int troopDamage;
+	float troopHealth;
+	float troopDamage;
+
 	float travelRange;
 	float attackRange;
 	bool isSelectedTroop;
@@ -22,6 +23,8 @@ public class MasterTroopScript : MonoBehaviour   {
 		assignIdentifier ();
 		MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 		originalPos = gameObject.transform.position;
+		troopHealth = 20;
+		troopDamage = 10;
 	}
 
 	void Update() {
@@ -29,6 +32,8 @@ public class MasterTroopScript : MonoBehaviour   {
 		if (originalPos != gameObject.transform.position) {
 			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 			originalPos = gameObject.transform.position;
+			troopDeath();
+			Debug.Log("Player Health: "+ troopHealth);
 			GameScript.turn = "EnemyTurn";
 
 		}
@@ -66,6 +71,15 @@ public class MasterTroopScript : MonoBehaviour   {
 			SetAsSelectedUnit();
 
 		}
+	}
+
+	public void dmg(float nDmg) {
+		troopHealth -= nDmg;
+	}
+
+	private void troopDeath() {
+		if (troopHealth <= 0)
+			Destroy (gameObject);
 	}
 
 	private void assignIdentifier() {

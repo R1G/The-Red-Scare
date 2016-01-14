@@ -49,4 +49,8 @@ public class BaseTile : MonoBehaviour {
 
 		}
 	}
+
+	public void setRange(int range) {
+		travelRange = range;
+	}
 }
