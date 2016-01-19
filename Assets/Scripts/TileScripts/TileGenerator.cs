@@ -48,7 +48,7 @@ public class TileGenerator : MonoBehaviour {
 	};
 
 	// Prefab resources
-	public string[] prefabResources = new string[] {
+	string[] prefabResources = new string[] {
 		"wall", 			// nonwalkable – red team wall
 		"brazier", 			// nonwalkable – red team ground glowing artifact
 		"bush", 			// nonwalkable – bush outside red team
