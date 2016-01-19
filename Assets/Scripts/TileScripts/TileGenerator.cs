@@ -7,7 +7,6 @@ public class TileGenerator : MonoBehaviour {
 
 	public static int mapCol;
 	public static int mapRow;
-	public TextAsset mapInfo;
 
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
 	public static int range = 3;
@@ -106,6 +105,4 @@ public class TileGenerator : MonoBehaviour {
 			highlightedTiles.Clear();
 		}
 	}
-
-
 }
