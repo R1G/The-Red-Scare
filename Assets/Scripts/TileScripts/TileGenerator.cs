@@ -12,7 +12,7 @@ public class TileGenerator : MonoBehaviour {
 	public static int range = 3;
 	public static List<GameObject> highlightedTiles = new List<GameObject>(); // Holds a reference to every highlighted tile
 
-	Quaternion tileRot = Quaternion.Euler(270, 0, 0);
+	Quaternion tileRot = Quaternion.Euler(0, 0, 0);
 
 	string[] tileTypes = new string[] {
 		"C26900", // wall – nonwalkable – red team wall
