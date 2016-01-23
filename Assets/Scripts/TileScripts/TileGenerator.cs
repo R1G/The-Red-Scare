@@ -142,8 +142,10 @@ public class TileGenerator : MonoBehaviour {
 			if(mapCol -r > 0) {
 			for (int c = lowerBoundCol; c < upperBoundCol; c++) {
 				if (mapCol - c > 0) {
-					tilesRef [r, c].GetComponent<MeshRenderer> ().material.color = Color.green;
-					highlightedTiles.Add (tilesRef [r, c]);
+						if (tilesRef [r, c].tag == "walkableTile") {
+							tilesRef [r, c].GetComponent<MeshRenderer> ().material.color = Color.green;
+							highlightedTiles.Add (tilesRef [r, c]);
+						}
 					}
 				}
 			}
