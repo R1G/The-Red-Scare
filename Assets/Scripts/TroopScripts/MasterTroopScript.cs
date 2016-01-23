@@ -5,7 +5,7 @@ public class MasterTroopScript : MonoBehaviour   {
 	
 	int troopHealth;
 	int troopDamage;
-	float travelRange;
+	public static float travelRange;
 	float attackRange;
 	bool isSelectedTroop;
 	Vector3 originalPos;
