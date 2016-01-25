@@ -3,10 +3,12 @@ using System.Collections;
 
 public class MasterTroopScript : MonoBehaviour   {
 	
+
 	float troopHealth;
 	float troopDamage;
 
-	float travelRange;
+	public static int travelRange;
+
 	float attackRange;
 	bool isSelectedTroop;
 	Vector3 originalPos;

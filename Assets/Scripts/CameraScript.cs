@@ -7,14 +7,13 @@ public class CameraScript : MonoBehaviour {
 
 	void Update() {
 		// Input.GetAxis returns a float value between -1 and 1
-		float horizontal = Input.GetAxis ("Horizontal") * mouseSensitivity;
+		float horizontal = Input.GetAxis ("Horizontal") * mouseSensitivity * -1;
 		float vertical = Input.GetAxis ("Vertical") * mouseSensitivity;
 
-		transform.Translate (horizontal, vertical, 0);
+		transform.Translate (vertical, 0, horizontal);
 
 		// Grab updated position of the camera
 		float xPos = transform.position.x;
-		float yPos = transform.position.y;
 		float zPos = transform.position.z;
 
 		// Reset camera position in case it gets out of bounds
@@ -26,7 +25,7 @@ public class CameraScript : MonoBehaviour {
 
 		// Update the position if need be
 		if (xPos != transform.position.x || zPos != transform.position.z) {
-			transform.position = new Vector3(xPos, yPos, zPos);
+			transform.position = new Vector3(xPos, 15, zPos);
 		}
 	}
 }
