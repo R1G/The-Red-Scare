@@ -36,6 +36,7 @@ public class BaseTile : MonoBehaviour {
 		}
 	}
 
+
 	void MoveSelectedTroop() {
 		float tileX = gameObject.transform.position.x;
 		float tileZ = gameObject.transform.position.z;

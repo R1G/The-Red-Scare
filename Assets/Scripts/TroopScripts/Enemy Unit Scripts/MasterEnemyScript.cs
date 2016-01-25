@@ -8,11 +8,16 @@ using System.Collections.Generic;
 public class MasterEnemyScript : MonoBehaviour {
 	
 
-	int enemyHealth;
-	int enemyDamage;
+
 	GameObject selectedTroop;
 	public bool isWithinAttackRange;
 	public GameObject gameController;
+	static int nEnemies;
+	static int nMoved;
+
+	public float enemyHealth;
+	public float enemyDamage;
+
 
 	float playerX;
 	float playerZ;
@@ -25,12 +30,11 @@ public class MasterEnemyScript : MonoBehaviour {
 
 
 
-	void Start() {
-		enemyHealth = 10;
-		enemyDamage = 10;
+	public virtual void Start() {
+		nEnemies++;
 	}
 
-	void CheckAttackRange() {
+	private void CheckAttackRange() {
 		playerX = selectedTroop.transform.position.x;
 		playerZ = selectedTroop.transform.position.z;
 
@@ -48,13 +52,12 @@ public class MasterEnemyScript : MonoBehaviour {
 		}
 	}
 
-	void EnemyDeath() {
-		if (enemyHealth <= 0) {
-			Destroy(gameObject);
-		}
+	private void EnemyDeath() {
+	
+		if(enemyHealth <= 0) Destroy(gameObject);
 	}
 
-	void Update() {
+	public virtual void Update() {
 		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
 		if (GameScript.turn == "EnemyTurn") {
 			findShortestDistance();
@@ -64,7 +67,11 @@ public class MasterEnemyScript : MonoBehaviour {
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
 				transform.Translate(movement);
 			}
-			GameScript.turn = "PlayerTurn";
+			nMoved++;
+			if(allEnemiesHaveMoved() == true) {
+				GameScript.turn = "PlayerTurn";
+				nMoved = 0;
+			}
 		}
 
 	}
@@ -161,6 +168,14 @@ public class MasterEnemyScript : MonoBehaviour {
 		} 
 
 		return vect;
+	}
+
+	private bool allEnemiesHaveMoved() {
+		if (nEnemies == nMoved) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
