@@ -42,6 +42,7 @@ public class BaseTile : MonoBehaviour {
 		float tileZ = gameObject.transform.position.z;
 
 		selectedTroop.transform.position = new Vector3 (tileX, 0, tileZ);
+		GameScript.playerTurn ();
 	}
 
 }

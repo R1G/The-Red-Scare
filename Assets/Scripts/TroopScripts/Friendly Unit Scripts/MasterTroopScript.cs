@@ -5,7 +5,7 @@ public class MasterTroopScript : MonoBehaviour   {
 	
 
 	float troopHealth;
-	float troopDamage;
+	//float troopDamage;
 
 	public static int travelRange;
 
@@ -26,7 +26,7 @@ public class MasterTroopScript : MonoBehaviour   {
 		MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 		originalPos = gameObject.transform.position;
 		troopHealth = 20;
-		troopDamage = 10;
+		//troopDamage = 10;
 	}
 
 	void Update() {
@@ -35,9 +35,6 @@ public class MasterTroopScript : MonoBehaviour   {
 			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 			originalPos = gameObject.transform.position;
 			troopDeath();
-			Debug.Log("Player Health: "+ troopHealth);
-			GameScript.turn = "EnemyTurn";
-
 		}
 	}
 

@@ -24,14 +24,14 @@ public class EnemyMelee : MasterEnemyScript {
 
 			GameObject[] friendlyList = GameObject.FindGameObjectsWithTag("FriendlyTroop");
 			foreach ( GameObject entry in friendlyList) {
-				if (Vector3.Distance (entry.transform.position, gameObject.transform.position) == 1){
+				Debug.Log (Vector3.Distance (entry.gameObject.transform.position, gameObject.transform.position));
 
-					if( hasAttacked == false) {
-						Debug.Log ("Enemy Melee Unit: attacking!");
-						troop = entry.GetComponent<MasterTroopScript>();
-						troop.dmg (meleeDmg);
-						hasAttacked = true;
-					}
+
+						if(hasAttacked == false) {
+							Debug.Log ("Enemy Melee Unit: attacking!");
+							troop = entry.GetComponent<MasterTroopScript>();
+							troop.dmg (meleeDmg);
+							hasAttacked = true;
 				}
 			}
 		}
