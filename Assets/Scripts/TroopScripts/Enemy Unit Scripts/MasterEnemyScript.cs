@@ -65,7 +65,9 @@ public class MasterEnemyScript : MonoBehaviour {
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-				transform.Translate(movement);
+				for (int t = 0; t < 5; t++) {
+					transform.Translate(movement);
+				}
 			}
 			nMoved++;
 			if(allEnemiesHaveMoved() == true) {
