@@ -20,8 +20,8 @@ public class CameraScript : MonoBehaviour {
 		if (xPos < 0) xPos = 0;
 		if (zPos < 0) zPos = 0;
 
-		if (xPos > TileGenerator.mapRow) xPos = TileGenerator.mapRow;
-		if (zPos > TileGenerator.mapCol) zPos = TileGenerator.mapCol;
+		if (xPos > 60) xPos = 60;
+		if (zPos > 56) zPos = 56;
 
 		// Update the position if need be
 		if (xPos != transform.position.x || zPos != transform.position.z) {
@@ -29,3 +29,4 @@ public class CameraScript : MonoBehaviour {
 		}
 	}
 }
+

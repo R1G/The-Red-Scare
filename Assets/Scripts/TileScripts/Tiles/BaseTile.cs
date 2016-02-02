@@ -26,11 +26,12 @@ public class BaseTile : MonoBehaviour {
 		int troopX = (int)selectedTroop.transform.position.x;
 		int troopZ = (int)selectedTroop.transform.position.z;
 
-		int distanceX = troopX - (int)gameObject.transform.position.x;
-		int distanceZ = troopZ - (int)gameObject.transform.position.z;
+		int distanceX = Mathf.Abs(troopX - (int)gameObject.transform.position.x);
+		int distanceZ = Mathf.Abs(troopZ - (int)gameObject.transform.position.z);
 
-		if (8 >= distanceX) {
-			if (8 >= distanceZ) {
+
+		if (3 >= distanceX) {
+			if (3 >= distanceZ) {
 				isWithinTravelRange = true;
 			}
 		}
