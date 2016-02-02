@@ -8,7 +8,6 @@ public class TileGenerator : MonoBehaviour {
 	public static int mapCol;
 	public static int mapRow;
 
-	public static GameObject[,] walkableTiles; //Holds a reference to every walkable tile
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
 	public static int range = 3;
 	public static List<GameObject> highlightedTiles = new List<GameObject>(); // Holds a reference to every highlighted tile

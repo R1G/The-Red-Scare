@@ -26,7 +26,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	private static Dictionary<string, Vector3> troopPosMap = new Dictionary<string, Vector3>();
 
 	public virtual void Start() {
-		nEnemies++;
+		nEnemies = 4;
 	}
 
 	private void CheckAttackRange() {
@@ -53,8 +53,8 @@ public class MasterEnemyScript : MonoBehaviour {
 	}
 
 	public virtual void Update() {
+		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
 		if (GameScript.turn == "EnemyTurn") {
-			selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
 			findShortestDistance();
 			Vector3 movement = determineDirection();
 			//The enemy unit will not move if adjacent to it's target's position
@@ -81,8 +81,7 @@ public class MasterEnemyScript : MonoBehaviour {
 				EnemyDeath();
 			}
 		}
-	}  
-
+	}
 	//This method maps the identifier of a friendly troop (it's name) to it's position
 	//This allows an enemy to determine the closest troop to attack
 	//Later we can add more information to the identifier, to, for example, determine the different between archers and melee
@@ -110,58 +109,42 @@ public class MasterEnemyScript : MonoBehaviour {
 
 		if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z < targetPosZ) {
 			Vector3 movement = new Vector3 (1, 0, 1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z > targetPosZ) {
 			Vector3 movement = new Vector3 (-1, 0, -1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z < targetPosZ) {
 			Vector3 movement = new Vector3 (-1, 0, 1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z > targetPosZ) {
 			Vector3 movement = new Vector3 (1, 0, -1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z > targetPosZ) {
 			Vector3 movement = new Vector3 (0, 0, -1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z < targetPosZ) {
 			Vector3 movement = new Vector3 (0, 0, 1);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z == targetPosZ) {
 			Vector3 movement = new Vector3 (1, 0, 0);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z == targetPosZ) {
 			Vector3 movement = new Vector3 (-1, 0, 0);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
+			return movement;
 
 		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z == targetPosZ) {
 			Vector3 movement = new Vector3 (0, 0, 0);
-			if (TileGenerator.tilesRef [(int)gameObject.transform.position.x + (int)movement.x, (int)gameObject.transform.position.x + (int)movement.z].tag != "unwalkableTile") {
-				return movement;
-			}
-		} Vector3 defaultMovement = new Vector3 (0,0,0); return defaultMovement;
+			return movement;
+		}
+		Vector3 defaultMovement = new Vector3 (0,0,0);
+		return defaultMovement;
 	}
 
 	private Vector3 findSmallest() {
