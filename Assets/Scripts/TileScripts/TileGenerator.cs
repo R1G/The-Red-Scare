@@ -16,7 +16,7 @@ public class TileGenerator : MonoBehaviour {
 
 	string[] tileTypes = new string[] {
 		"C26900", // wall – nonwalkable – red team wall
-		"ff770b", // brazier – nonwalkable – red team ground glowing artifact
+		"FF770B", // brazier – nonwalkable – red team ground glowing artifact
 		"BA960A", // bush – nonwalkable – bush outside red team
 		"FFC40F", // dirt – walkable – red team outer ground
 		"C5BEAC", // water - empty
@@ -69,7 +69,7 @@ public class TileGenerator : MonoBehaviour {
 		"path", 			// walkable – blue team road/path
 		"rampart", 			// nonwalkable – blue team wall
 		"pillar", 			// nonwalkable – center area alternate quadrant prop
-		"redBuff", 		// walkable – center area lower bottom quadrant
+		"redBuff", 		    // walkable – center area lower bottom quadrant
 		"tealHouse", 		// non-walkable – center area house of the Teal family
 		"grayHouse", 		// non-walkable – center area house of the Gray family
 		"brownHouse", 		// non wallable – center area house of the Indian family
