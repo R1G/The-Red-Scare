@@ -26,7 +26,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	private static Dictionary<string, Vector3> troopPosMap = new Dictionary<string, Vector3>();
 
 	public virtual void Start() {
-		nEnemies = 4;
+		nEnemies = 5;
 	}
 
 	private void CheckAttackRange() {
