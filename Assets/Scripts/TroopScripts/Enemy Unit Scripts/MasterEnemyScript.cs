@@ -60,7 +60,7 @@ public class MasterEnemyScript : MonoBehaviour {
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-				for (int t = 0; t < 4; t++) {
+				for (int t = 0; t < 1; t++) {
 					transform.Translate(movement);
 
 				}
