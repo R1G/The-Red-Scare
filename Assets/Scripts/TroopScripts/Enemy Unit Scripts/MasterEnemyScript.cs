@@ -53,14 +53,17 @@ public class MasterEnemyScript : MonoBehaviour {
 	}
 
 	public virtual void Update() {
-		selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
+		//selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
 		if (GameScript.turn == "EnemyTurn") {
 			findShortestDistance();
 			Vector3 movement = determineDirection();
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
+				for (int t = 0; t < 4; t++) {
 					transform.Translate(movement);
+
+				}
 			}
 			nMoved++;
 			if(allEnemiesHaveMoved() == true) {
@@ -107,7 +110,6 @@ public class MasterEnemyScript : MonoBehaviour {
 		Vector3 defaultMovement = new Vector3 (0,0,0);
 
 		if (enemyX < targetPosX && enemyZ < targetPosZ) {
-			Debug.Log ("check1");
 			if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (1, 0, 1);
 				return movement;
@@ -127,7 +129,6 @@ public class MasterEnemyScript : MonoBehaviour {
 				return defaultMovement;
 			}
 		} else if (enemyX < targetPosX && enemyZ == targetPosZ) {
-			Debug.Log ("check2");
 			if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (1, 0, 0);
 				return movement;
@@ -135,17 +136,19 @@ public class MasterEnemyScript : MonoBehaviour {
 				Vector3 movement = new Vector3 (1, 0, 1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (1, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (0, 0, 1);
+				return movement;
+			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1]) {
+				Vector3 movement = new Vector3 (0, 0, -1);
 				return movement;
 			} else {
 				return defaultMovement;
 			}
 
 		} else if (enemyX == targetPosX && enemyZ < targetPosZ) {
-			Debug.Log ("check3");
 			if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (0, 0, 1);
 				return movement;
@@ -156,35 +159,36 @@ public class MasterEnemyScript : MonoBehaviour {
 				Vector3 movement = new Vector3 (-1, 0, 1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (1, 0, 0);
+				return movement;
+			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
+				Vector3 movement = new Vector3 (-1, 0, 0);
 				return movement;
 			} else {
 				return defaultMovement;
 			}
 
 		} else if (enemyX > targetPosX && enemyZ > targetPosZ) {
-			Debug.Log ("check4");
 			if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (-1, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (-1, 0, 0);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (0, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (1, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (-1, 0, 1);
 				return movement;
 			} else {
 				return defaultMovement;
 			}
 
 		} else if (enemyX > targetPosX && enemyZ == targetPosZ) {
-			Debug.Log ("check5");
 			if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (-1, 0, 0);
 				return movement;
@@ -202,18 +206,20 @@ public class MasterEnemyScript : MonoBehaviour {
 			}
 
 		} else if (enemyX == targetPosX && enemyZ > targetPosZ) {
-			Debug.Log ("check7");
 			if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (0, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (-1, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (1, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
+				Vector3 movement = new Vector3 (-1, 0, 0);
+				return movement;
+			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ]) {
+				Vector3 movement = new Vector3 (1, 0, 0);
 				return movement;
 			} else {
 				return defaultMovement;
@@ -246,7 +252,7 @@ public class MasterEnemyScript : MonoBehaviour {
 				Vector3 movement = new Vector3 (1, 0, 0);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
+				Vector3 movement = new Vector3 (0, 0, -1);
 				return movement;
 			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
 				Vector3 movement = new Vector3 (1, 0, 1);
