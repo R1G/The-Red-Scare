@@ -26,7 +26,8 @@ public class MasterEnemyScript : MonoBehaviour {
 	private static Dictionary<string, Vector3> troopPosMap = new Dictionary<string, Vector3>();
 
 	public virtual void Start() {
-		nEnemies = 5;
+		nEnemies = 500;
+		nMoved = 0;
 	}
 
 	private void CheckAttackRange() {
@@ -52,26 +53,30 @@ public class MasterEnemyScript : MonoBehaviour {
 		if(enemyHealth <= 0) Destroy(gameObject);
 	}
 
-	public virtual void Update() {
-		//selectedTroop = GameObject.FindGameObjectWithTag ("SelectedTroop");
+	public virtual void LateUpdate() {
+		
 		if (GameScript.turn == "EnemyTurn") {
+			MoveAndAttackEnemy ();
+		} 
+	}
+
+	public virtual void MoveAndAttackEnemy() {
 			findShortestDistance();
 			Vector3 movement = determineDirection();
+			Vector3 enemyPos = gameObject.transform.position;
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-				for (int t = 0; t < 1; t++) {
-					transform.Translate(movement);
-
+			for(int t = 0; t < 5; t++) {
+					transform.position = Vector3.Lerp (enemyPos, enemyPos + movement, 0.1f);
+				nMoved++;
+					if(allEnemiesHaveMoved() == true) {
+					GameScript.turn = "PlayerTurn";
+					nMoved = 0;
+						
 				}
-			}
-			nMoved++;
-			if(allEnemiesHaveMoved() == true) {
-				GameScript.turn = "PlayerTurn";
-				nMoved = 0;
-			}
-		}
-
+			} 
+		}  
 	}
 
 	void OnMouseUp() {
@@ -270,72 +275,6 @@ public class MasterEnemyScript : MonoBehaviour {
 
 
 	}
-
-	//This determines which way the enemy should move
-	//The unit has to move different depending on whether it's target is behind them, in front of them, diagonal to them, etc.
-	/*private Vector3 determineDirection() {		
-		int enemyX = (int)gameObject.transform.position.x;
-		int enemyZ = (int)gameObject.transform.position.z;
-
-		if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, 0);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, 0);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef[enemyX, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, 0);
-			Debug.Log (TileGenerator.tilesRef[enemyX, enemyZ].tag);
-				Debug.Log (TileGenerator.tilesRef[enemyX, enemyZ]);
-			return movement;
-
-		}
-		Vector3 defaultMovement = new Vector3 (0,0,0);
-		return defaultMovement;
-		//Debug.Log ("check");
-	} */
 
 	private Vector3 findSmallest() {
 		Vector3 vect = new Vector3 (0, 0, 0);
