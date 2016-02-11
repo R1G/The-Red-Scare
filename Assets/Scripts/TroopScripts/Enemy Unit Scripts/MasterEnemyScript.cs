@@ -107,235 +107,37 @@ public class MasterEnemyScript : MonoBehaviour {
 	private Vector3 determineDirection() {
 		int enemyX = (int)gameObject.transform.position.x;
 		int enemyZ = (int)gameObject.transform.position.z;
-		Vector3 defaultMovement = new Vector3 (0,0,0);
 
-		if (enemyX < targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-		} else if (enemyX < targetPosX && enemyZ == targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1]) {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
+		int xPos = 0;
+		int zPos = 0;
 
-		} else if (enemyX == targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
+		// If enemy is to the west of the target pos,
+		// then it needs to move 1 unit to the right
+		// If enemy is to the east of the target pos,
+		// then it needs to move 1 unit to the left
+		if (enemyX - targetPosX < 0) {
+			xPos = 1;
+		} else if (enemyX - targetPosX > 0) {
+			xPos = -1;
+		}
 
-		} else if (enemyX > targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX > targetPosX && enemyZ == targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX == targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ]) {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX > targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-		} else if (enemyX < targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
+		// If enemy is toward the north of the target pos,
+		// then it needs to move 1 unit down
+		// If enemy is toward the south of the target pos,
+		// then it needs to move 1 unit up
+		if (enemyZ - targetPosZ < 0) {
+			zPos = 1;
+		} else  if (enemyZ - targetPosZ > 0) {
+			zPos = -1;
+		}
+			
+		if (TileGenerator.tilesRef [enemyX + xPos, enemyZ + zPos].tag == "walkableTile") {
+			return new Vector3 (xPos, 0, zPos);
 		} else {
-			return defaultMovement;
+			// Computed tile is not walkable
+			return new Vector3 (0, 0, 0);
 		}
-
-
-
 	}
-
-	//This determines which way the enemy should move
-	//The unit has to move different depending on whether it's target is behind them, in front of them, diagonal to them, etc.
-	/*private Vector3 determineDirection() {		
-		int enemyX = (int)gameObject.transform.position.x;
-		int enemyZ = (int)gameObject.transform.position.z;
-
-		if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z > targetPosZ && TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, -1);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z < targetPosZ && TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, 1);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x < targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (1, 0, 0);
-			Debug.Log (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x > targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (-1, 0, 0);
-			Debug.Log (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag);
-			Debug.Log (TileGenerator.tilesRef [enemyX, enemyZ - 1]);
-			return movement;
-
-		} else if (gameObject.transform.position.x == targetPosX && gameObject.transform.position.z == targetPosZ && TileGenerator.tilesRef[enemyX, enemyZ].tag == "walkableTile") {
-			Vector3 movement = new Vector3 (0, 0, 0);
-			Debug.Log (TileGenerator.tilesRef[enemyX, enemyZ].tag);
-				Debug.Log (TileGenerator.tilesRef[enemyX, enemyZ]);
-			return movement;
-
-		}
-		Vector3 defaultMovement = new Vector3 (0,0,0);
-		return defaultMovement;
-		//Debug.Log ("check");
-	} */
 
 	private Vector3 findSmallest() {
 		Vector3 vect = new Vector3 (0, 0, 0);
