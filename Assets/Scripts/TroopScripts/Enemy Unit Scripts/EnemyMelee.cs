@@ -17,7 +17,7 @@ public class EnemyMelee : MasterEnemyScript {
 		enemyDamage = meleeDmg;
 	}
 
-	public override void Update() {
+	/*public override IEnumerator Update() {
 		base.Update ();
 
 		if (GameScript.turn == "EnemyTurn") {
@@ -37,5 +37,5 @@ public class EnemyMelee : MasterEnemyScript {
 		if (GameScript.turn == "PlayerTurn") 
 			hasAttacked = false;
 	}
-
+*/
 }
