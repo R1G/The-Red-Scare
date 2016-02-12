@@ -26,7 +26,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	private static Dictionary<string, Vector3> troopPosMap = new Dictionary<string, Vector3>();
 
 	public virtual void Start() {
-		nEnemies = 500;
+		nEnemies = 5;
 		nMoved = 0;
 	}
 
@@ -67,15 +67,15 @@ public class MasterEnemyScript : MonoBehaviour {
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-			for(int t = 0; t < 5; t++) {
-					transform.position = Vector3.Lerp (enemyPos, enemyPos + movement, 0.1f);
+			// for(int t = 0; t < 5; t++) {
+			transform.position = movement;
 				nMoved++;
 					if(allEnemiesHaveMoved() == true) {
 					GameScript.turn = "PlayerTurn";
 					nMoved = 0;
 						
 				}
-			} 
+			// } 
 		}  
 	}
 
@@ -109,39 +109,27 @@ public class MasterEnemyScript : MonoBehaviour {
 		targetPosZ = smallestPos.z;
 	}
 
+	// Take a list of tiles and determine the one that is walkable AND nearest to the target position
+	private GameObject getNearestTile(List<GameObject> tiles, float targetPosX, float targetPosZ) {
+		GameObject nearestTile = tiles[0];
+		Vector3 targetPos = new Vector3((int) targetPosX, 0, (int) targetPosZ);
+		float distance = Vector3.Distance(nearestTile.transform.position, targetPos);
+		foreach (GameObject tile in tiles) {
+			if (Vector3.Distance(tile.transform.position, targetPos) < distance) {
+				nearestTile = tile;
+			}
+		}
+
+		return nearestTile;
+	}
+
 	private Vector3 determineDirection() {
 		int enemyX = (int)gameObject.transform.position.x;
 		int enemyZ = (int)gameObject.transform.position.z;
 
-		int xPos = 0;
-		int zPos = 0;
-
-		// If enemy is to the west of the target pos,
-		// then it needs to move 1 unit to the right
-		// If enemy is to the east of the target pos,
-		// then it needs to move 1 unit to the left
-		if (enemyX - targetPosX < 0) {
-			xPos = 1;
-		} else if (enemyX - targetPosX > 0) {
-			xPos = -1;
-		}
-
-		// If enemy is toward the north of the target pos,
-		// then it needs to move 1 unit down
-		// If enemy is toward the south of the target pos,
-		// then it needs to move 1 unit up
-		if (enemyZ - targetPosZ < 0) {
-			zPos = 1;
-		} else  if (enemyZ - targetPosZ > 0) {
-			zPos = -1;
-		}
-			
-		if (TileGenerator.tilesRef [enemyX + xPos, enemyZ + zPos].tag == "walkableTile") {
-			return new Vector3 (xPos, 0, zPos);
-		} else {
-			// Computed tile is not walkable
-			return new Vector3 (0, 0, 0);
-		}
+		List<GameObject> tiles = TileGenerator.getWalkableTilesInRange(enemyX, enemyZ, 1);
+		GameObject tile = getNearestTile(tiles, targetPosX, targetPosZ);
+		return new Vector3 (tile.transform.position.x, 0, tile.transform.position.z);
 	}
 
 	private Vector3 findSmallest() {
