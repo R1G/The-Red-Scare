@@ -121,6 +121,18 @@ public class TileGenerator : MonoBehaviour {
 	// Highlight an area of tiles around the selected troop
 	public static void highlightTilesInRange(int x, int z) {
 		unhighlightTiles();
+
+		List<GameObject> tiles = getWalkableTilesInRange(x, z, range);
+		foreach (GameObject tile in tiles) {
+			tile.GetComponent<MeshRenderer> ().material.color = Color.green;
+			highlightedTiles.Add (tile);
+		}
+	}
+
+	// Return a list of walkable tiles around a certain tile for a specific range
+	public static List<GameObject> getWalkableTilesInRange(int x, int z, int range) {
+		List<GameObject> tilesInRange = new List<GameObject>();
+
 		// Compute non-zero lower and upper bounds to loop within tiles ref
 		int lowerBoundRow = x - range;
 		if (lowerBoundRow < 0) {
@@ -141,22 +153,23 @@ public class TileGenerator : MonoBehaviour {
 		int upperBoundCol = z + range + 1;
 
 		if (upperBoundCol > mapCol) {
-		upperBoundCol = mapCol;
+			upperBoundCol = mapCol;
 		}
 
 
 		for (int r = lowerBoundRow; r <= upperBoundRow; r++) {
 			if(mapCol -r > 0) {
-			for (int c = lowerBoundCol; c < upperBoundCol; c++) {
-				if (mapCol - c > 0) {
+				for (int c = lowerBoundCol; c < upperBoundCol; c++) {
+					if (mapCol - c > 0) {
 						if (tilesRef [r, c].tag == "walkableTile") {
-							tilesRef [r, c].GetComponent<MeshRenderer> ().material.color = Color.green;
-							highlightedTiles.Add (tilesRef [r, c]);
+							tilesInRange.Add(tilesRef [r, c]);
 						}
 					}
 				}
 			}
 		}
+
+		return tilesInRange;
 	}
 
 	public static void unhighlightTiles() {
