@@ -67,7 +67,9 @@ public class MasterEnemyScript : MonoBehaviour {
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
+			// Commenting this loop out as MasterEnemy script is added to all the 5 troops from the scene view
 			// for(int t = 0; t < 5; t++) {
+			// Disabling Vector.Lerp temporarily
 			transform.position = movement;
 				nMoved++;
 					if(allEnemiesHaveMoved() == true) {
