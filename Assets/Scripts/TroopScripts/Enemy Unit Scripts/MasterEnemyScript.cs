@@ -26,7 +26,7 @@ public class MasterEnemyScript : MonoBehaviour {
 	private static Dictionary<string, Vector3> troopPosMap = new Dictionary<string, Vector3>();
 
 	public virtual void Start() {
-		nEnemies = 500;
+		nEnemies = 5;
 		nMoved = 0;
 	}
 
@@ -67,15 +67,17 @@ public class MasterEnemyScript : MonoBehaviour {
 			//The enemy unit will not move if adjacent to it's target's position
 			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
 			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-			for(int t = 0; t < 5; t++) {
-					transform.position = Vector3.Lerp (enemyPos, enemyPos + movement, 0.1f);
+			// Commenting this loop out as MasterEnemy script is added to all the 5 troops from the scene view
+			// for(int t = 0; t < 5; t++) {
+			// Disabling Vector.Lerp temporarily
+			transform.position = movement;
 				nMoved++;
 					if(allEnemiesHaveMoved() == true) {
 					GameScript.turn = "PlayerTurn";
 					nMoved = 0;
 						
 				}
-			} 
+			// } 
 		}  
 	}
 
@@ -109,171 +111,27 @@ public class MasterEnemyScript : MonoBehaviour {
 		targetPosZ = smallestPos.z;
 	}
 
+	// Take a list of tiles and determine the one that is walkable AND nearest to the target position
+	private GameObject getNearestTile(List<GameObject> tiles, float targetPosX, float targetPosZ) {
+		GameObject nearestTile = tiles[0];
+		Vector3 targetPos = new Vector3((int) targetPosX, 0, (int) targetPosZ);
+		float distance = Vector3.Distance(nearestTile.transform.position, targetPos);
+		foreach (GameObject tile in tiles) {
+			if (Vector3.Distance(tile.transform.position, targetPos) < distance) {
+				nearestTile = tile;
+			}
+		}
+
+		return nearestTile;
+	}
+
 	private Vector3 determineDirection() {
 		int enemyX = (int)gameObject.transform.position.x;
 		int enemyZ = (int)gameObject.transform.position.z;
-		Vector3 defaultMovement = new Vector3 (0,0,0);
 
-		if (enemyX < targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-		} else if (enemyX < targetPosX && enemyZ == targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1]) {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX == targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX > targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX > targetPosX && enemyZ == targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX == targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ]) {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-
-		} else if (enemyX > targetPosX && enemyZ < targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX - 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-		} else if (enemyX < targetPosX && enemyZ > targetPosZ) {
-			if (TileGenerator.tilesRef [enemyX + 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 0);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (0, 0, -1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX + 1, enemyZ + 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (1, 0, 1);
-				return movement;
-			} else if (TileGenerator.tilesRef [enemyX - 1, enemyZ - 1].tag == "walkableTile") {
-				Vector3 movement = new Vector3 (-1, 0, -1);
-				return movement;
-			} else {
-				return defaultMovement;
-			}
-		} else {
-			return defaultMovement;
-		}
-
-
-
+		List<GameObject> tiles = TileGenerator.getWalkableTilesInRange(enemyX, enemyZ, 1);
+		GameObject tile = getNearestTile(tiles, targetPosX, targetPosZ);
+		return new Vector3 (tile.transform.position.x, 0, tile.transform.position.z);
 	}
 
 	private Vector3 findSmallest() {
@@ -297,7 +155,9 @@ public class MasterEnemyScript : MonoBehaviour {
 	}
 
 	private bool allEnemiesHaveMoved() {
-		if (nEnemies == nMoved) {
+		// Enabling multiple moves per ememy
+		// TODO: fix issue where all enemy units get the same ideal position
+		if (nEnemies * 5 == nMoved) {
 			return true;
 		} else {
 			return false;
