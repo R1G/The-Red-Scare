@@ -29,20 +29,14 @@ public class MasterTroopScript : MonoBehaviour   {
 		//troopDamage = 10;
 	}
 
-	void Update() {
-		//If the first logged position does not equal the current position of the unit, then it has moved
+	void SetAsSelectedUnit() {
+		gameObject.tag = "SelectedTroop";
+		TileGenerator.highlightTilesInRange((int)gameObject.transform.position.x, (int)gameObject.transform.position.z);
 		if (originalPos != gameObject.transform.position) {
 			MasterEnemyScript.addFriendlyPos (identifier, transform.position);
 			originalPos = gameObject.transform.position;
 			troopDeath();
 		}
-	}
-
-
-
-	void SetAsSelectedUnit() {
-		gameObject.tag = "SelectedTroop";
-		TileGenerator.highlightTilesInRange((int)gameObject.transform.position.x, (int)gameObject.transform.position.z);
 	}
 
 	public void UnsetAsSelectedUnit () {

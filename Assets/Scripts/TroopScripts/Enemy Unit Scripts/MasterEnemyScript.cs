@@ -61,20 +61,17 @@ public class MasterEnemyScript : MonoBehaviour {
 	}
 
 	public virtual void MoveAndAttackEnemy() {
-			findShortestDistance();
-			Vector3 movement = determineDirection();
-			Vector3 enemyPos = gameObject.transform.position;
-			//The enemy unit will not move if adjacent to it's target's position
-			if(gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1) 
-			   || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
-			for(int t = 0; t < 5; t++) {
-					transform.position = Vector3.Lerp (enemyPos, enemyPos + movement, 0.1f);
+		findShortestDistance ();
+		Vector3 movement = determineDirection ();
+		Vector3 enemyPos = gameObject.transform.position;
+		//The enemy unit will not move if adjacent to it's target's position
+		if (gameObject.transform.position.x > (targetPosX + 1) || gameObject.transform.position.x < (targetPosX - 1)
+		    || gameObject.transform.position.z > (targetPosZ + 1) || gameObject.transform.position.z < (targetPosZ - 1)) {
+				transform.Translate (movement);
 				nMoved++;
-					if(allEnemiesHaveMoved() == true) {
+				if (allEnemiesHaveMoved () == true) {
 					GameScript.turn = "PlayerTurn";
 					nMoved = 0;
-						
-				}
 			} 
 		}  
 	}
@@ -271,7 +268,7 @@ public class MasterEnemyScript : MonoBehaviour {
 		} else {
 			return defaultMovement;
 		}
-
+		return defaultMovement;
 
 
 	}
@@ -303,5 +300,4 @@ public class MasterEnemyScript : MonoBehaviour {
 			return false;
 		}
 	}
-
 }
