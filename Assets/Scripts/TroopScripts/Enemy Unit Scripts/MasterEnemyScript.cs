@@ -155,7 +155,9 @@ public class MasterEnemyScript : MonoBehaviour {
 	}
 
 	private bool allEnemiesHaveMoved() {
-		if (nEnemies == nMoved) {
+		// Enabling multiple moves per ememy
+		// TODO: fix issue where all enemy units get the same ideal position
+		if (nEnemies * 5 == nMoved) {
 			return true;
 		} else {
 			return false;
