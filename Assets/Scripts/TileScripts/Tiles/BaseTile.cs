@@ -30,10 +30,8 @@ public class BaseTile : MonoBehaviour {
 		int distanceZ = Mathf.Abs(troopZ - (int)gameObject.transform.position.z);
 
 
-		if (TileGenerator.range >= distanceX) {
-			if (TileGenerator.range >= distanceZ) {
+		if (TileGenerator.range >= distanceX + distanceZ) {
 				isWithinTravelRange = true;
-			}
 		}
 	}
 
