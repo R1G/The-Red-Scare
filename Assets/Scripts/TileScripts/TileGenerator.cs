@@ -9,7 +9,7 @@ public class TileGenerator : MonoBehaviour {
 	public static int mapRow;
 
 	public static GameObject [,] tilesRef;	// Holds a reference to every instantiated tile
-	public static int range = 3;
+	public static int range = 6;
 	public static List<GameObject> highlightedTiles = new List<GameObject>(); // Holds a reference to every highlighted tile
 
 	Quaternion tileRot = Quaternion.Euler(0, 0, 0);
@@ -124,8 +124,12 @@ public class TileGenerator : MonoBehaviour {
 
 		List<GameObject> tiles = getWalkableTilesInRange(x, z, range);
 		foreach (GameObject tile in tiles) {
-			tile.GetComponent<MeshRenderer> ().material.color = Color.green;
-			highlightedTiles.Add (tile);
+			int deltaX = Mathf.Abs((int)tile.transform.position.x - x);
+			int deltaZ = Mathf.Abs((int)tile.transform.position.z - z);
+			if (deltaX + deltaZ <= range) {
+				tile.GetComponent<MeshRenderer> ().material.color = Color.green;
+				highlightedTiles.Add (tile);
+			}
 		}
 	}
 
