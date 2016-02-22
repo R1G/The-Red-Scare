@@ -122,7 +122,7 @@ public class TileGenerator : MonoBehaviour {
 	public static void highlightTilesInRange(int x, int z) {
 		unhighlightTiles();
 
-		List<GameObject> tiles = getWalkableTilesInRange(x, z, range);
+		List<GameObject> tiles = FindPossibleTiles(x, z, range);
 		foreach (GameObject tile in tiles) {
 			int deltaX = Mathf.Abs((int)tile.transform.position.x - x);
 			int deltaZ = Mathf.Abs((int)tile.transform.position.z - z);
@@ -184,4 +184,43 @@ public class TileGenerator : MonoBehaviour {
 			highlightedTiles.Clear();
 		}
 	}
+
+	public static List<GameObject>FindPossibleTiles(int xPos, int zPos, int range) {
+
+		unhighlightTiles ();
+		List<GameObject> openTiles = new List<GameObject> ();
+		List<GameObject> walkableTiles = new List<GameObject> ();
+		for (int x = -1; x <= 1; x++) {
+			for (int z = -1; z <= 1; z++) {
+				if (x == 0 && z == 0) {
+					continue;
+				} else if (tilesRef [xPos + x, zPos + z].tag == "walkableTile" && tilesRef [xPos + x, zPos + z] != null) {
+					openTiles.Add (tilesRef [xPos + x, zPos + z]);
+					walkableTiles.Add (tilesRef [xPos + x, zPos + z]);
+
+				}
+			} 
+		}
+			for (int t = 0; t < range; t++) {
+			foreach (GameObject tile in openTiles.ToArray()) {
+					int tileX = (int)tile.transform.position.x;
+					int tileZ = (int)tile.transform.position.z;
+					
+					for (int x = -1; x <= 1; x++) {
+						for (int z = -1; z <= 1; z++) {
+							if (x == 0 && z == 0) {
+								continue;
+						} if (tileX + x <= 64 && tileZ + z <= 64 && tileX + x >= 0 && tileZ + z >= 0) {
+							if (tilesRef [tileX + x, tileZ + z].tag == "walkableTile" && !openTiles.Contains(tilesRef [tileX + x, tileZ + z])) {
+								walkableTiles.Add (tilesRef [tileX + x, tileZ + z]);
+							}
+						} 
+					} 
+				}
+			}
+			openTiles = walkableTiles;
+		}
+		return walkableTiles;
+	}
+
 }
