@@ -122,7 +122,7 @@ public class TileGenerator : MonoBehaviour {
 	public static void highlightTilesInRange(int x, int z) {
 		unhighlightTiles();
 
-		List<GameObject> tiles = FindPossibleTiles(x, z, range);
+		List<GameObject> tiles = GetWalkableTilesInRange(x, z, range);
 		foreach (GameObject tile in tiles) {
 			int deltaX = Mathf.Abs((int)tile.transform.position.x - x);
 			int deltaZ = Mathf.Abs((int)tile.transform.position.z - z);
@@ -131,49 +131,6 @@ public class TileGenerator : MonoBehaviour {
 				highlightedTiles.Add (tile);
 			}
 		}
-	}
-
-	// Return a list of walkable tiles around a certain tile for a specific range
-	public static List<GameObject> getWalkableTilesInRange(int x, int z, int range) {
-		List<GameObject> tilesInRange = new List<GameObject>();
-
-		// Compute non-zero lower and upper bounds to loop within tiles ref
-		int lowerBoundRow = x - range;
-		if (lowerBoundRow < 0) {
-			lowerBoundRow = 0;
-		}
-
-		int upperBoundRow = x + range; 
-		if (upperBoundRow > mapRow) {
-			upperBoundRow = mapRow;
-		}
-
-
-		int lowerBoundCol = z - range;
-		if (lowerBoundCol < 0) {
-			lowerBoundCol = 0;
-		}
-
-		int upperBoundCol = z + range + 1;
-
-		if (upperBoundCol > mapCol) {
-			upperBoundCol = mapCol;
-		}
-
-
-		for (int r = lowerBoundRow; r <= upperBoundRow; r++) {
-			if(mapCol -r > 0) {
-				for (int c = lowerBoundCol; c < upperBoundCol; c++) {
-					if (mapCol - c > 0) {
-						if (tilesRef [r, c].tag == "walkableTile") {
-							tilesInRange.Add(tilesRef [r, c]);
-						}
-					}
-				}
-			}
-		}
-
-		return tilesInRange;
 	}
 
 	public static void unhighlightTiles() {
@@ -185,7 +142,7 @@ public class TileGenerator : MonoBehaviour {
 		}
 	}
 
-	public static List<GameObject>FindPossibleTiles(int xPos, int zPos, int range) {
+	public static List<GameObject>GetWalkableTilesInRange(int xPos, int zPos, int range) {
 
 		unhighlightTiles ();
 		List<GameObject> openTiles = new List<GameObject> ();
@@ -210,7 +167,7 @@ public class TileGenerator : MonoBehaviour {
 						for (int z = -1; z <= 1; z++) {
 							if (x == 0 && z == 0) {
 								continue;
-						} if (tileX + x <= 64 && tileZ + z <= 64 && tileX + x >= 0 && tileZ + z >= 0) {
+						} if (tileX + x <= 63 && tileZ + z <= 63 && tileX + x >= 0 && tileZ + z >= 0) {
 							if (tilesRef [tileX + x, tileZ + z].tag == "walkableTile" && !openTiles.Contains(tilesRef [tileX + x, tileZ + z])) {
 								walkableTiles.Add (tilesRef [tileX + x, tileZ + z]);
 							}

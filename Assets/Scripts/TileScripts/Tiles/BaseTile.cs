@@ -28,15 +28,8 @@ public class BaseTile : MonoBehaviour {
 	}
 
 	void CheckRange() {
-		int troopX = (int)selectedTroop.transform.position.x;
-		int troopZ = (int)selectedTroop.transform.position.z;
-
-		int distanceX = Mathf.Abs(troopX - (int)gameObject.transform.position.x);
-		int distanceZ = Mathf.Abs(troopZ - (int)gameObject.transform.position.z);
-
-
-		if (TileGenerator.range >= distanceX + distanceZ) {
-				isWithinTravelRange = true;
+		if (TileGenerator.highlightedTiles.Contains(gameObject)) {
+			isWithinTravelRange = true;
 		}
 	}
 
