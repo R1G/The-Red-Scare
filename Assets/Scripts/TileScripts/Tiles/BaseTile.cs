@@ -38,7 +38,6 @@ public class BaseTile : MonoBehaviour {
 		float tileX = gameObject.transform.position.x;
 		float tileZ = gameObject.transform.position.z;
 
-		PathFinder.FindPath (TileGenerator.tilesRef[(int)selectedTroop.transform.position.x,(int)selectedTroop.transform.position.z],gameObject);
 		selectedTroop.transform.position = new Vector3 (tileX, 0, tileZ);
 		GameScript.playerTurn ();
 	}
