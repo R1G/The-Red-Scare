@@ -5,14 +5,22 @@ using System.Collections.Generic;
 public class AIScript : MonoBehaviour {
 
 	NavMeshAgent agent;
-
+	public GameObject gameManager;
 	GameObject[] WayPoints;
+
 
 	int communism = Random.Range (0, 10);
 	int honesty = Random.Range (0, 10);
 	int violence = Random.Range (0, 10);
 
-	bool isSelected;
+
+	//state variables
+	bool isSelected = false;
+	bool isAttacking = false;
+	bool isFleeing = false;
+
+	//player unit
+	public GameObject detective;
 
 
 	//Is it possible to add these waypoints in the editor to gameobjects that are being instantiated?
@@ -26,6 +34,8 @@ public class AIScript : MonoBehaviour {
 
 
 
+
+	//Reference for pathfinding 
 	int wayPointChoice;
 
 	void Start() {
@@ -46,6 +56,8 @@ public class AIScript : MonoBehaviour {
 		//For example, there can nenver be more than 10 or less than 2
 
 		//changed name from choices to actual trait names
+
+
 
 
 		int wayPointChoice = Random.Range (0, 4);
@@ -74,22 +86,26 @@ public class AIScript : MonoBehaviour {
 
 
 	void Update() {
-		if (isSelected) {
-			agent.Stop ();
+		if (isAttacking) {
+			Attack ();
+		} else if (isFleeing) {
+			Escape ();
+			isFleeing = false;
+		} else if (isSelected) {
+			
 		} else {
-			agent.Resume ();
-		}
-		if (agent.remainingDistance <= 2f) {
-			int choice = Random.Range (0, 4);
-			agent.SetDestination (WayPoints [choice].transform.position);
+			if (agent.remainingDistance <= 1f || agent.destination == null) {
+				wayPointChoice = Random.Range (0, 4);
+				agent.SetDestination (WayPoints [wayPointChoice].transform.position);
+			} else {
+				agent.Resume ();
+			}
 		}
 	}
 
 	void OnMouseDown() {
 		if (isSelected) {
 			isSelected = false;
-			wayPointChoice = Random.Range (0, 4);
-			agent.SetDestination (WayPoints [wayPointChoice].transform.position);
 		} else {
 			isSelected = true;
 		//	AnswerQuestion ();
@@ -136,30 +152,40 @@ public class AIScript : MonoBehaviour {
 	}
 
 
-
+	*/
 	void Attack() {
-		Debug.Log (gameObject.name + " is going to attack");
+		isAttacking = true;
+		agent.SetDestination (detective.transform.position);
 	}
 
 	void Confess() {
 		Debug.Log (gameObject.name + " has confessed his Communist nature");
 	}
 
+	/*
 	void AccuseInnocent() {
-		Debug.Log (gameObject.name + " has accused " + " of Communism");
+		GameObject accused = gameManager.GetComponent<GameManager> ().AI [4];
+		Debug.Log (gameObject.name + " has accused " + accused.name + " of Communism");
 	}
 
+
 	void AccuseGuilty() {
-		Debug.Log (gameObject.name + " has accused " + " of Communism");
+		GameObject accused = gameManager.GetComponent<GameManager> ().AI [3];
+		Debug.Log (gameObject.name + " has accused " + accused.name + " of Communism");
 	}
 
 	void Deny() {
 		Debug.Log (gameObject.name + " denies any relation to the Communist party");
+		agent.Resume ();
 	}
+*/
 
 	void Escape() {
-		Debug.Log (gameObject.name + "is attempting to fleeeeeeee");
+		Debug.Log (gameObject.name + " is attempting to fleeeeeeee");
+		agent.Resume ();
+		agent.speed = 5f;
+		isFleeing = true;
 	}
 
-*/
+
 }
