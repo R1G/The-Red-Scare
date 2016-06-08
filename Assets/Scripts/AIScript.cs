@@ -8,31 +8,53 @@ public class AIScript : MonoBehaviour {
 
 	GameObject[] WayPoints;
 
-	public bool isCommunist;
-	public bool isHonest;
-	public bool isViolent;
+	int communism = Random.Range (0, 10);
+	int honesty = Random.Range (0, 10);
+	int violence = Random.Range (0, 10);
 
 	bool isSelected;
 
-	public GameObject WayPoint1;
-	public GameObject WayPoint2;
-	public GameObject WayPoint3;
-	public GameObject WayPoint4;
+
+	//Is it possible to add these waypoints in the editor to gameobjects that are being instantiated?
+	//for now, I changed these to private, and found the waypoints by name
+	//probably want to change this later
+
+	GameObject WayPoint1;
+	GameObject WayPoint2; 
+	GameObject WayPoint3; 
+	GameObject WayPoint4;
+
+
 
 	int wayPointChoice;
 
 	void Start() {
 
+		WayPoint1 = GameObject.Find("WayPoint1");
+		WayPoint2 =  GameObject.Find("WayPoint2");
+		WayPoint3 =  GameObject.Find("WayPoint3");
+		WayPoint4 = GameObject.Find("WayPoint4");
+
+		gameObject.tag = "Citizen";
+
 		WayPoints = new GameObject[4]{WayPoint1, WayPoint2, WayPoint3, WayPoint4};
 
 		agent = GetComponent<NavMeshAgent> ();
 
-		int choice1 = Random.Range (0, 2);
-		int choice2 = Random.Range (0, 2);
-		int choice3 = Random.Range (0, 2);
+
+		// TODO: put smarter code for determining how many communists there are at game start
+		//For example, there can nenver be more than 10 or less than 2
+
+		//changed name from choices to actual trait names
+
 
 		int wayPointChoice = Random.Range (0, 4);
 
+
+
+		//Commented out the boolean aspects of the ai traits
+
+		/*
 		if (choice1 == 0) {
 			isCommunist = true;
 			gameObject.tag = "Communist";
@@ -44,10 +66,12 @@ public class AIScript : MonoBehaviour {
 
 		if (choice3 == 0) {
 			isViolent = true;
-		}
+		} */
 
 		agent.SetDestination(WayPoints[wayPointChoice].transform.position);
 	}
+
+
 
 	void Update() {
 		if (isSelected) {
@@ -68,10 +92,16 @@ public class AIScript : MonoBehaviour {
 			agent.SetDestination (WayPoints [wayPointChoice].transform.position);
 		} else {
 			isSelected = true;
-			AnswerQuestion ();
+		//	AnswerQuestion ();
 		}
 	}
 
+	public int getCommunism(){
+		return communism;
+	}
+
+	//I commented this out as well, just to avoid the errors I'd get from commenting out the earlier bools
+	/*
 	void AnswerQuestion() {
 		if (isCommunist) {
 			if (isHonest) {
@@ -105,6 +135,8 @@ public class AIScript : MonoBehaviour {
 		}
 	}
 
+
+
 	void Attack() {
 		Debug.Log (gameObject.name + " is going to attack");
 	}
@@ -129,4 +161,5 @@ public class AIScript : MonoBehaviour {
 		Debug.Log (gameObject.name + "is attempting to fleeeeeeee");
 	}
 
+*/
 }
