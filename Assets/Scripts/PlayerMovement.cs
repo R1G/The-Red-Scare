@@ -3,7 +3,11 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
-	public float speed;
+
+	//This is in units
+	public float forwardSpeed;
+	//This is in degrees
+	public float rotationalSpeed;
 	Animator anim;
 
 	void Start() {
@@ -16,8 +20,11 @@ public class PlayerMovement : MonoBehaviour {
 		horizontal = Input.GetAxis ("Horizontal");
 		vertical = Input.GetAxis ("Vertical");
 
-		transform.Translate (0, 0, vertical*speed);
-		transform.Rotate (0, horizontal, 0);
+
+
+		//Added time.deltatime. calculation below should work out to meters per frame
+		transform.Translate (0, 0, vertical*forwardSpeed*Time.deltaTime);
+		transform.Rotate (0, horizontal*rotationalSpeed*Time.deltaTime, 0);
 
 		anim.SetFloat ("speed", vertical);
 	}
