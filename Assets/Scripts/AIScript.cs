@@ -97,6 +97,7 @@ public class AIScript : MonoBehaviour {
 			if (agent.remainingDistance <= 1f || agent.destination == null) {
 				wayPointChoice = Random.Range (0, 4);
 				agent.SetDestination (WayPoints [wayPointChoice].transform.position);
+				agent.speed = 10f;
 			} else {
 				agent.Resume ();
 			}

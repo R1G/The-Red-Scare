@@ -16,10 +16,6 @@ public class GameManager : MonoBehaviour {
 
 	int communistLimit;
 
-
-
-
-
 	void Start() {
 		for (int i = 0; i < population; i++) {
 			//We'll need to instantiate these guys better, as in not all in the same exact place
