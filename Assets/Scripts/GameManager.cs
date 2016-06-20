@@ -35,12 +35,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Update(){
+
+		//The communist limit is detirmined by the communist power divided by five, as can be seen here
+		//This determines the real number of citiaens who are also communists
 		communistLimit = communistPower / 5;
 		balanceCommunists();
+
 		Debug.Log (communists.Count);
 	}
 
-
+	//Takes all the citizens, and finds the magnitude of their communist characteristic
+	//If it is at or above five, it adds them to the communism group
 	void FindCommunists() {
 
 		foreach (GameObject person in citizens) {
@@ -57,6 +62,11 @@ public class GameManager : MonoBehaviour {
 			}
 		} */
 	}
+
+	//This method makes sure that the number of communists never exceeds the communist limit, and tries to add new communists when possible
+	//the first if statement finds the current communist with the lowest communism characteristic, and removes it from the communist list
+	//The second simply tries to add more communist to the list
+	//This method activates every frame, so hopefuly it won't affect the fps.If not we can optimise it later
 
 	void balanceCommunists(){
 		
