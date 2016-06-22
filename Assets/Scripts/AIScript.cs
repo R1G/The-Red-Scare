@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class AIScript : MonoBehaviour {
 
+	Animator anim;
+
 	NavMeshAgent agent;
 	public GameObject gameManager;
 	GameObject[] WayPoints;
@@ -32,13 +34,15 @@ public class AIScript : MonoBehaviour {
 	GameObject WayPoint3; 
 	GameObject WayPoint4;
 
-
-
+	public float walkSpeed;
+	public float runSpeed;
 
 	//Reference for pathfinding 
 	int wayPointChoice;
 
 	void Start() {
+		
+		anim = GetComponent<Animator> ();
 
 		WayPoint1 = GameObject.Find("WayPoint1");
 		WayPoint2 =  GameObject.Find("WayPoint2");
@@ -50,7 +54,7 @@ public class AIScript : MonoBehaviour {
 		WayPoints = new GameObject[4]{WayPoint1, WayPoint2, WayPoint3, WayPoint4};
 
 		agent = GetComponent<NavMeshAgent> ();
-
+		agent.speed = walkSpeed;
 
 		// TODO: put smarter code for determining how many communists there are at game start
 		//For example, there can nenver be more than 10 or less than 2
@@ -86,6 +90,13 @@ public class AIScript : MonoBehaviour {
 
 
 	void Update() {
+
+		float rowSpeed = Mathf.Abs (agent.velocity.x);
+		float collumnSpeed = Mathf.Abs (agent.velocity.z);
+		float speed = GetHypotenuse (rowSpeed, collumnSpeed);
+		anim.SetFloat ("Speed", speed/2);
+
+
 		if (isAttacking) {
 			Attack ();
 		} else if (isFleeing) {
@@ -97,7 +108,7 @@ public class AIScript : MonoBehaviour {
 			if (agent.remainingDistance <= 1f || agent.destination == null) {
 				wayPointChoice = Random.Range (0, 4);
 				agent.SetDestination (WayPoints [wayPointChoice].transform.position);
-				agent.speed = 10f;
+				agent.speed = walkSpeed;
 			} else {
 				agent.Resume ();
 			}
@@ -184,9 +195,12 @@ public class AIScript : MonoBehaviour {
 	void Escape() {
 		Debug.Log (gameObject.name + " is attempting to fleeeeeeee");
 		agent.Resume ();
-		agent.speed = 5f;
+		agent.speed = walkSpeed;
 		isFleeing = true;
 	}
 
-
+	public float GetHypotenuse(float x, float z) {
+		float hyp = Mathf.Sqrt (x * x + z * z);
+		return hyp;
+	}
 }
