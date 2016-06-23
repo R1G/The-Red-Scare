@@ -6,17 +6,25 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject citizen;
+	public GameObject crime;
 
 	public static int population = 10;
 
 	GameObject[] citizens = new GameObject[population];
 	List<GameObject> communists = new List<GameObject> (); 
+	GameObject[] buildings;
+
+	float crimeCooldown = 1f;
+	float cooldownRemaining = 0;
 
 	public int communistPower = 20;
 
 	int communistLimit;
 
 	void Start() {
+
+		setBuildings ();
+
 		for (int i = 0; i < population; i++) {
 			//We'll need to instantiate these guys better, as in not all in the same exact place
 			//Alternitively, we could instantiate them in the same place, and let the the town run for a minute, 
@@ -37,7 +45,7 @@ public class GameManager : MonoBehaviour {
 		communistLimit = communistPower / 5;
 		balanceCommunists();
 
-		Debug.Log (communists.Count);
+		handleCrimes ();
 	}
 
 	//Takes all the citizens, and finds the magnitude of their communist characteristic
@@ -84,4 +92,21 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	void setBuildings(){
+		buildings = GameObject.FindGameObjectsWithTag ("Building");
+	}
+
+	void handleCrimes(){
+		cooldownRemaining -= Time.deltaTime;
+		if (cooldownRemaining <= 0) {
+			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
+			Debug.Log (newCrime);
+			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
+			crimeData.setData ("communist", communists, communistPower, buildings);
+			cooldownRemaining = crimeCooldown;
+
+
+
+		}
+	}
 }
