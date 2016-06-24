@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+<<<<<<< HEAD
 	void setBuildings(){
 		buildings = GameObject.FindGameObjectsWithTag ("Building");
 	}
@@ -108,4 +109,8 @@ public class GameManager : MonoBehaviour {
 
 		}
 	}
+=======
+
+
+>>>>>>> 68b00bc70d3493c4026559e87f9a7e30dbe0aca2
 }
