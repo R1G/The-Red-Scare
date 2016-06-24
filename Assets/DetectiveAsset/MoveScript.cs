@@ -4,6 +4,8 @@ using System.Collections;
 public class MoveScript : MonoBehaviour {
 
 	Animator anim;
+	public float walkSpeed;
+	public float runSpeed;
 
 	void Start() {
 		anim = GetComponent<Animator> ();
@@ -19,12 +21,12 @@ public class MoveScript : MonoBehaviour {
 		anim.SetFloat ("rotation", turning);
 
 		if (Input.GetButton ("Jump")) {
-			transform.Translate (0, 0, forward * .1f);
+			transform.Translate (0, 0, forward * runSpeed);
 			transform.Rotate (0, turning/2, 0);
 			anim.SetFloat ("Speed", forward*2);
 			gameObject.GetComponentInChildren<Camera> ().fieldOfView = Mathf.Lerp(gameObject.GetComponentInChildren<Camera> ().fieldOfView,80,0.1f);
 		} else {
-			transform.Translate (0, 0, forward*.05f);
+			transform.Translate (0, 0, forward*walkSpeed);
 			transform.Rotate (0, turning, 0);
 			if (gameObject.GetComponentInChildren<Camera> ().fieldOfView != 65) {
 				gameObject.GetComponentInChildren<Camera> ().fieldOfView = Mathf.Lerp (gameObject.GetComponentInChildren<Camera> ().fieldOfView, 65, 0.1f);
