@@ -30,6 +30,7 @@ public class CrimeDataClass : MonoBehaviour {
 		this.buildings = buildings;
 
 		GameObject building = buildings[Random.Range(0,buildings.Length)];
+		Debug.Log (building.transform.position);
 		gameObject.transform.position = building.transform.position;
 		gameObject.transform.rotation = building.transform.rotation;
 		

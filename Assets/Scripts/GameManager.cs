@@ -100,7 +100,6 @@ public class GameManager : MonoBehaviour {
 		cooldownRemaining -= Time.deltaTime;
 		if (cooldownRemaining <= 0) {
 			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
-			Debug.Log (newCrime);
 			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
 			crimeData.setData ("communist", communists, communistPower, buildings);
 			cooldownRemaining = crimeCooldown;
