@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 	List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
 
-	float crimeCooldown = 1f;
+	float crimeCooldown = 120f;
 	float cooldownRemaining = 0;
 
 	public int communistPower = 20;
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
 	int communistLimit;
 
 	void Start() {
-
+		Debug.Log (Random.value);
 		setBuildings ();
 
 		for (int i = 0; i < population; i++) {
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-<<<<<<< HEAD
+
 	void setBuildings(){
 		buildings = GameObject.FindGameObjectsWithTag ("Building");
 	}
@@ -109,8 +109,5 @@ public class GameManager : MonoBehaviour {
 
 		}
 	}
-=======
 
-
->>>>>>> 68b00bc70d3493c4026559e87f9a7e30dbe0aca2
 }

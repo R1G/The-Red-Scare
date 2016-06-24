@@ -6,8 +6,12 @@ public class CrimeDataClass : MonoBehaviour {
 
 	static int crimeNumber = 0;
 
+	bool inProgress;
+
 	string crimeType;
 	List<GameObject> perpetrators;
+	GameObject perpetrator;
+	AIScript perpScript;
 	int communistPower;
 	GameObject[] buildings;
 
@@ -22,6 +26,8 @@ public class CrimeDataClass : MonoBehaviour {
 	
 	}
 
+	//TODO: Add code for when a citizen is within range of the crime
+
 	public void setData (string crimeType, List<GameObject> perpetrators, int communistPower, GameObject[] buildings){
 		
 		this.crimeType = crimeType;
@@ -33,6 +39,28 @@ public class CrimeDataClass : MonoBehaviour {
 		Debug.Log (building.transform.position);
 		gameObject.transform.position = building.transform.position;
 		gameObject.transform.rotation = building.transform.rotation;
+
+		startCrime();
 		
+	}
+
+
+	void startCrime() {
+		perpetrator = selectPerpetrator ();
+		perpScript = perpetrator.GetComponent<AIScript> ();
+
+		perpScript.commitCrime (gameObject.transform.position, gameObject.GetComponent<CrimeDataClass>());
+
+	}
+
+	GameObject selectPerpetrator(){
+		return perpetrators [Random.Range (0, perpetrators.Count)];
+	}
+
+	public void crimeActive(){
+		inProgress = true;
+	}
+
+	public void crimeDeactive(){
 	}
 }
