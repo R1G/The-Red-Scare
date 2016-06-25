@@ -20,6 +20,9 @@ public class AIScript : MonoBehaviour {
 	bool isSelected = false;
 	bool isAttacking = false;
 	bool isFleeing = false;
+	bool commitingCrime = false;
+
+	CrimeDataClass currentCrimeScript;
 
 	//player unit
 	public GameObject detective;
@@ -103,6 +106,14 @@ public class AIScript : MonoBehaviour {
 			Escape ();
 			isFleeing = false;
 		} else if (isSelected) {
+			
+		} else if(commitingCrime){
+			if (agent.remainingDistance <= 1f) {
+				commitingCrime = false;
+				currentCrimeScript.crimeActive ();
+				currentCrimeScript = null;
+			}
+			
 			
 		} else {
 			if (agent.remainingDistance <= 1f || agent.destination == null) {
@@ -202,5 +213,11 @@ public class AIScript : MonoBehaviour {
 	public float GetHypotenuse(float x, float z) {
 		float hyp = Mathf.Sqrt (x * x + z * z);
 		return hyp;
+	}
+
+	public void commitCrime(Vector3 location, CrimeDataClass crimeScript){
+		agent.SetDestination (location);
+		commitingCrime = true;
+		currentCrimeScript = crimeScript;
 	}
 }

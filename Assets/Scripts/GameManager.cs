@@ -6,17 +6,25 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject citizen;
+	public GameObject crime;
 
 	public static int population = 10;
 
 	GameObject[] citizens = new GameObject[population];
 	List<GameObject> communists = new List<GameObject> (); 
+	GameObject[] buildings;
+
+	float crimeCooldown = 120f;
+	float cooldownRemaining = 0;
 
 	public int communistPower = 20;
 
 	int communistLimit;
 
 	void Start() {
+		Debug.Log (Random.value);
+		setBuildings ();
+
 		for (int i = 0; i < population; i++) {
 			//We'll need to instantiate these guys better, as in not all in the same exact place
 			//Alternitively, we could instantiate them in the same place, and let the the town run for a minute, 
@@ -31,12 +39,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Update(){
+
+		//The communist limit is detirmined by the communist power divided by five, as can be seen here
+		//This determines the real number of citiaens who are also communists
 		communistLimit = communistPower / 5;
 		balanceCommunists();
-		Debug.Log (communists.Count);
+
+		handleCrimes ();
 	}
 
-
+	//Takes all the citizens, and finds the magnitude of their communist characteristic
+	//If it is at or above five, it adds them to the communism group
 	void FindCommunists() {
 
 		foreach (GameObject person in citizens) {
@@ -53,6 +66,11 @@ public class GameManager : MonoBehaviour {
 			}
 		} */
 	}
+
+	//This method makes sure that the number of communists never exceeds the communist limit, and tries to add new communists when possible
+	//the first if statement finds the current communist with the lowest communism characteristic, and removes it from the communist list
+	//The second simply tries to add more communist to the list
+	//This method activates every frame, so hopefuly it won't affect the fps.If not we can optimise it later
 
 	void balanceCommunists(){
 		
@@ -75,5 +93,21 @@ public class GameManager : MonoBehaviour {
 	}
 
 
+	void setBuildings(){
+		buildings = GameObject.FindGameObjectsWithTag ("Building");
+	}
+
+	void handleCrimes(){
+		cooldownRemaining -= Time.deltaTime;
+		if (cooldownRemaining <= 0) {
+			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
+			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
+			crimeData.setData ("communist", communists, communistPower, buildings);
+			cooldownRemaining = crimeCooldown;
+
+
+
+		}
+	}
 
 }
