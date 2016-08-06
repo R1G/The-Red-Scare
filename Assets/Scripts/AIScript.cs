@@ -2,180 +2,152 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class AIScript : MonoBehaviour {
 
 	Animator anim;
 
 	NavMeshAgent agent;
 	public GameObject gameManager;
-	GameObject[] WayPoints;
-
 
 	int communism = Random.Range (0, 10);
 	int honesty = Random.Range (0, 10);
 	int violence = Random.Range (0, 10);
 
+	public TraitDataClass hat, glasses, hair, coat; 
+	public GameObject hatGO, glassesGO, hairGO, coatGO;
 
 	//state variables
 	bool isSelected = false;
 	bool isAttacking = false;
 	bool isFleeing = false;
 	bool commitingCrime = false;
+	bool inBuilding = false;
 
-	CrimeDataClass currentCrimeScript;
+	CrimeSceneScript currentCrimeScript;
 
 	//player unit
 	public GameObject detective;
 
-
-	//Is it possible to add these waypoints in the editor to gameobjects that are being instantiated?
-	//for now, I changed these to private, and found the waypoints by name
-	//probably want to change this later
-
-	GameObject WayPoint1;
-	GameObject WayPoint2; 
-	GameObject WayPoint3; 
-	GameObject WayPoint4;
-
 	public float walkSpeed;
 	public float runSpeed;
 
-	//Reference for pathfinding 
-	int wayPointChoice;
+	List <int> crimesCommitted = new List<int>();
+	List <int> crimesWitnessed; 
+
+	MeshRenderer civHeadRenderer;
+	MeshRenderer civBodyRenderer;
+	BoxCollider civCollider;
+
+	float cooldownRemaining = 0f;
+
+	private bool guiActive;
+
+	private Ray ray;
+	private RaycastHit hit;
 
 	void Start() {
+		//instantiating and initializing 4 traits
+		hat = ScriptableObject.CreateInstance<TraitDataClass>();
+		coat = ScriptableObject.CreateInstance<TraitDataClass>();
+		hair = ScriptableObject.CreateInstance<TraitDataClass>();
+		glasses = ScriptableObject.CreateInstance<TraitDataClass>();
+		hat.Init ("wears a hat", GlobalDataScript.GetRandomBool(), hatGO);
+		glasses.Init ("wears glasses", GlobalDataScript.GetRandomBool(), glassesGO);
+		hair.Init ("has a beard", GlobalDataScript.GetRandomBool(), hairGO);
+		coat.Init ("wears a thick coat", GlobalDataScript.GetRandomBool(), coatGO);
+
+		guiActive = false;
+		gameObject.name = GlobalDataScript.GenerateName ();
+
+		civHeadRenderer = gameObject.transform.GetChild (0).GetComponent<MeshRenderer>();
+		civBodyRenderer = gameObject.transform.GetChild (1).GetComponent<MeshRenderer>();
+		civCollider = gameObject.GetComponent<BoxCollider> ();
 		
 		anim = GetComponent<Animator> ();
-
-		WayPoint1 = GameObject.Find("WayPoint1");
-		WayPoint2 =  GameObject.Find("WayPoint2");
-		WayPoint3 =  GameObject.Find("WayPoint3");
-		WayPoint4 = GameObject.Find("WayPoint4");
-
 		gameObject.tag = "Citizen";
-
-		WayPoints = new GameObject[4]{WayPoint1, WayPoint2, WayPoint3, WayPoint4};
 
 		agent = GetComponent<NavMeshAgent> ();
 		agent.speed = walkSpeed;
 
-		// TODO: put smarter code for determining how many communists there are at game start
-		//For example, there can nenver be more than 10 or less than 2
-
-		//changed name from choices to actual trait names
-
-
-
-
-		int wayPointChoice = Random.Range (0, 4);
-
-
-
-		//Commented out the boolean aspects of the ai traits
-
-		/*
-		if (choice1 == 0) {
-			isCommunist = true;
-			gameObject.tag = "Communist";
-		} 
-
-		if (choice2 == 0) {
-			isHonest = true;
-		}
-
-		if (choice3 == 0) {
-			isViolent = true;
-		} */
-
-		agent.SetDestination(WayPoints[wayPointChoice].transform.position);
+		GlobalDataScript.MoveToWayPoint (gameObject);
 	}
-
-
 
 	void Update() {
 
-		float rowSpeed = Mathf.Abs (agent.velocity.x);
-		float collumnSpeed = Mathf.Abs (agent.velocity.z);
-		float speed = GetHypotenuse (rowSpeed, collumnSpeed);
-		anim.SetFloat ("Speed", speed/2);
+		cooldownRemaining -= Time.deltaTime;
 
-
-		if (isAttacking) {
-			Attack ();
-		} else if (isFleeing) {
-			Escape ();
-			isFleeing = false;
-		} else if (isSelected) {
-			
-		} else if(commitingCrime){
+		 if (commitingCrime) {
 			if (agent.remainingDistance <= 1f) {
 				commitingCrime = false;
-				currentCrimeScript.crimeActive ();
+				//currentCrimeScript.CrimeActive ();
 				currentCrimeScript = null;
 			}
-			
-			
 		} else {
-			if (agent.remainingDistance <= 1f || agent.destination == null) {
-				wayPointChoice = Random.Range (0, 4);
-				agent.SetDestination (WayPoints [wayPointChoice].transform.position);
-				agent.speed = walkSpeed;
-			} else {
-				agent.Resume ();
+			if (agent.hasPath != true) {
+				GlobalDataScript.MoveToWayPoint (gameObject);
 			}
 		}
 	}
 
-	void OnMouseDown() {
-		if (isSelected) {
-			isSelected = false;
-		} else {
-			isSelected = true;
-		//	AnswerQuestion ();
+	void OnGUI(){
+		if (guiActive == false) {
+			if (Input.GetMouseButtonDown (1) == true) {
+				ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				Physics.Raycast (ray, out hit);
+				if (hit.collider.gameObject == gameObject) {
+					guiActive = true;
+				}
+			}
+		}
+		if (guiActive == true){
+			agent.Stop ();
+			GUIStyle whiteBackground = new GUIStyle();
+
+			Texture2D texmex = MakeTex (100, 100, Color.white);
+			whiteBackground.normal.background = texmex;
+
+			//Vector3 pos = gameObject.transform.position;
+
+			Vector3 boxLocation = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+			//this inverts the y of the ui box, which is necesary to make it track the npc
+			float boxY = (Screen.height - boxLocation.y) -  50;
+			float boxX = boxLocation.x + 10;
+
+			GUILayout.BeginArea (new Rect(boxX, boxY, 100, 100),gameObject.name,whiteBackground );
+
+			GUILayout.BeginVertical ();
+
+			GUILayout.FlexibleSpace ();
+
+			GUILayout.BeginHorizontal ();
+
+			if(GUILayout.Button("Interrogate",GUILayout.Width(40))){
+				AnswerQuestion ();
+			}
+
+			if(GUILayout.Button("Arrest",GUILayout.Width(40))){
+				Arrest ();
+			}
+				
+			GUILayout.EndHorizontal ();
+
+
+			if(GUILayout.Button("Close")){
+				guiActive = false;
+				agent.Resume ();
+			}
+
+			GUILayout.EndVertical ();
+			GUILayout.EndArea();
+			//RectTransform g = new RectTransform ();
 		}
 	}
 
-	public int getCommunism(){
+	public int GetCommunism(){
 		return communism;
 	}
 
-	//I commented this out as well, just to avoid the errors I'd get from commenting out the earlier bools
-	/*
-	void AnswerQuestion() {
-		if (isCommunist) {
-			if (isHonest) {
-				if (isViolent) {
-					Attack ();
-				} else {
-					Escape ();
-				}
-			} else {
-				if (isViolent) {
-					AccuseInnocent ();
-				} else {
-					Deny ();
-				}
-
-			}
-		} else {
-			if (isViolent) {
-				if (isHonest) {
-					AccuseGuilty ();
-				} else {
-					AccuseInnocent ();
-				}
-			} else {
-				if (isHonest) {
-					Deny ();
-				} else {
-					Escape ();
-				}
-			}
-		}
-	}
-
-
-	*/
 	void Attack() {
 		isAttacking = true;
 		agent.SetDestination (detective.transform.position);
@@ -185,24 +157,6 @@ public class AIScript : MonoBehaviour {
 		Debug.Log (gameObject.name + " has confessed his Communist nature");
 	}
 
-	/*
-	void AccuseInnocent() {
-		GameObject accused = gameManager.GetComponent<GameManager> ().AI [4];
-		Debug.Log (gameObject.name + " has accused " + accused.name + " of Communism");
-	}
-
-
-	void AccuseGuilty() {
-		GameObject accused = gameManager.GetComponent<GameManager> ().AI [3];
-		Debug.Log (gameObject.name + " has accused " + accused.name + " of Communism");
-	}
-
-	void Deny() {
-		Debug.Log (gameObject.name + " denies any relation to the Communist party");
-		agent.Resume ();
-	}
-*/
-
 	void Escape() {
 		Debug.Log (gameObject.name + " is attempting to fleeeeeeee");
 		agent.Resume ();
@@ -210,14 +164,57 @@ public class AIScript : MonoBehaviour {
 		isFleeing = true;
 	}
 
-	public float GetHypotenuse(float x, float z) {
-		float hyp = Mathf.Sqrt (x * x + z * z);
-		return hyp;
-	}
-
-	public void commitCrime(Vector3 location, CrimeDataClass crimeScript){
+	public void CommitCrime(Vector3 location, CrimeSceneScript crimeScript){
 		agent.SetDestination (location);
+
 		commitingCrime = true;
 		currentCrimeScript = crimeScript;
+		//crimesCommitted.Add (crimeScript.GetCrimeNumber ());
+	}
+
+	public void TurnInvisible() {
+		civCollider.enabled = false;
+		civHeadRenderer.enabled = false;
+		civBodyRenderer.enabled = false;
+		gameObject.GetComponent<ParticleSystem> ().maxParticles = 0;
+	}
+
+	public void TurnVisible() {
+		civCollider.enabled = true;
+		civHeadRenderer.enabled = true;
+		civBodyRenderer.enabled = true;
+	}
+
+	private Texture2D MakeTex(int width, int height, Color col) {
+		Color[] pix = new Color[width*height];
+
+		for(int i = 0; i < pix.Length; i++)
+			pix[i] = col;
+
+		Texture2D result = new Texture2D(width, height);
+		result.SetPixels(pix);
+		result.Apply();
+
+		return result;
+	}
+
+	public void Arrest() {
+		if (communism > 5) {
+			Debug.Log ("You have arrested a communist!");
+			GameManager.communistPower -= 10;
+		} else {
+			Debug.Log ("You have arrested an innocent citizen!");
+			GameManager.communistPower += 5;
+		}
+		TurnInvisible ();
+		guiActive = false;
+	}
+
+	public void AnswerQuestion() {
+		if (honesty >= 8) {
+			Debug.Log (communism);
+		} else {
+			Debug.Log (3);
+		}
 	}
 }

@@ -20,13 +20,10 @@ public class PlayerMovement : MonoBehaviour {
 		horizontal = Input.GetAxis ("Horizontal");
 		vertical = Input.GetAxis ("Vertical");
 
-
-
 		//Added time.deltatime. calculation below should work out to meters per frame
-		transform.Translate (0, 0, vertical*forwardSpeed*Time.deltaTime);
+		transform.Translate (vertical*forwardSpeed*Time.deltaTime, 0, 0 );
 		transform.Rotate (0, horizontal*rotationalSpeed*Time.deltaTime, 0);
 
 		anim.SetFloat ("speed", vertical);
 	}
-
 }

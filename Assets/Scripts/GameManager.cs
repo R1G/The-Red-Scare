@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,81 +9,78 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject citizen;
 	public GameObject crime;
-
-	public static int population = 10;
+	public float detectiveSkill;
+	GameObject[] spawnPoints;
+	public DossierDataClass dossier;
+	public string dossierText;
+	public bool dossierActive;
+	public static int population = 20;
 
 	GameObject[] citizens = new GameObject[population];
 	List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
 
-	float crimeCooldown = 120f;
-	float cooldownRemaining = 0;
+	float crimeCooldown = 30f;
+	float cooldownRemaining = 0f;
+	public Text score;
 
-	public int communistPower = 20;
+	public static int communistPower = 45;
+	int defaultCommunistPower = 20;
 
 	int communistLimit;
 
+	// TODO: put smarter code for determining how many communists there are at game start
+	//For example, there can nenver be more than 10 or less than 2
 	void Start() {
-		Debug.Log (Random.value);
-		setBuildings ();
+		dossierActive = false;
+		dossier = ScriptableObject.CreateInstance<DossierDataClass> ();
+		score.text = communistPower.ToString ();
+		spawnPoints = GameObject.FindGameObjectsWithTag ("WayPoint");
+		SetBuildings ();
 
+		Debug.Log ("Spawning Citizens");
 		for (int i = 0; i < population; i++) {
-			//We'll need to instantiate these guys better, as in not all in the same exact place
-			//Alternitively, we could instantiate them in the same place, and let the the town run for a minute, 
-			//letting the waypoints disperse the NPCs
-
-			citizens[i] =(GameObject) Instantiate (citizen, Vector3.zero, Quaternion.identity);
+			int spawnPointChoice = Random.Range(0, 16);
+			citizens[i] =(GameObject) Instantiate (citizen, spawnPoints[spawnPointChoice].transform.position, Quaternion.identity);
 		}
-		
 
 		FindCommunists ();
 		Debug.Log (communists.Count);
 	}
 
 	void Update(){
-
-		//The communist limit is detirmined by the communist power divided by five, as can be seen here
-		//This determines the real number of citiaens who are also communists
+		//The communist limit is determined by the communist power divided by five, as can be seen here
+		//This determines the real number of citizens who are also communists
 		communistLimit = communistPower / 5;
-		balanceCommunists();
+		BalanceCommunists();
 
-		handleCrimes ();
+		HandleCrimes ();
+		UpdateScore ();
 	}
 
-	//Takes all the citizens, and finds the magnitude of their communist characteristic
-	//If it is at or above five, it adds them to the communism group
 	void FindCommunists() {
-
+		//Takes all the citizens, and finds the magnitude of their communist characteristic
+		//If it is at or above five, it adds them to the communism group
 		foreach (GameObject person in citizens) {
 			AIScript script = person.GetComponent<AIScript> ();
 
-			if (script.getCommunism () >= 5) communists.Add (person);
-				
+			if (script.GetCommunism () >= 5) communists.Add (person);
 		}
-
-		/*
-		for (int i = 0; i < 8; i++) {
-			if (AI [i].tag == "Communist") {
-				communistNumber++;
-			}
-		} */
 	}
 
-	//This method makes sure that the number of communists never exceeds the communist limit, and tries to add new communists when possible
-	//the first if statement finds the current communist with the lowest communism characteristic, and removes it from the communist list
-	//The second simply tries to add more communist to the list
-	//This method activates every frame, so hopefuly it won't affect the fps.If not we can optimise it later
-
-	void balanceCommunists(){
-		
+	void BalanceCommunists(){
+		//This method makes sure that the number of communists never exceeds the communist limit, and tries to add new communists when possible
+		//the first if statement finds the current communist with the lowest communism characteristic, and removes it from the communist list
+		//The second simply tries to add more communist to the list
+		//This method activates every frame, so hopefully it won't affect the fps. If not we can optimise it later
 		if (communists.Count > communistLimit) {
 			int communismCheck = 100;
 			GameObject deleteTarget = communists [0];
 			foreach (GameObject person in communists) {
 				AIScript script = person.GetComponent<AIScript> ();
-				if (script.getCommunism() < communismCheck) {
+				if (script.GetCommunism() < communismCheck) {
 					deleteTarget = person;
-					communismCheck = script.getCommunism ();
+					communismCheck = script.GetCommunism ();
 				}
 			}
 			 communists.Remove (deleteTarget);
@@ -92,22 +91,60 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-
-	void setBuildings(){
+	void SetBuildings(){
 		buildings = GameObject.FindGameObjectsWithTag ("Building");
 	}
 
-	void handleCrimes(){
+	void HandleCrimes(){
 		cooldownRemaining -= Time.deltaTime;
 		if (cooldownRemaining <= 0) {
 			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
 			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
-			crimeData.setData ("communist", communists, communistPower, buildings);
-			cooldownRemaining = crimeCooldown;
-
-
-
+			crimeData.dossier = dossier;
+			SetBuildings ();
+			crimeData.SetData ("communist", communists, communistPower, buildings);
+			communistPower += 20;
+			cooldownRemaining = AdjustCrimeCooldown(crimeCooldown);
 		}
 	}
 
+	void UpdateScore() {
+		if (communistPower != defaultCommunistPower) {
+			score.text = communistPower.ToString ();
+			Debug.Log (communistPower);
+			defaultCommunistPower = communistPower;
+			if (communistPower <= 0) {
+				Debug.Log ("You Win! No more communists in Levittburg!");
+				SceneManager.LoadScene ("WinningScene");
+
+			}
+			if (communistPower >= 100) {
+				Debug.Log ("You lose! The radicals have overthrown Levittburg!");
+				SceneManager.LoadScene ("LosingScene");
+			}
+		}
+	}
+
+	float AdjustCrimeCooldown(float currentCooldown) {
+		float cooldown = currentCooldown * 50*50/communistPower/communistPower;
+		return cooldown;
+	}
+
+	void OnGUI() {
+		GUI.Label (new Rect (Screen.width/8, 2*Screen.height/3, 2*Screen.width/3, 2*Screen.height/3), dossierText);
+		if (dossierActive) {	
+			dossierText = dossier.GetDossierText ();
+		} else {
+			dossierText = "";
+		}
+	}
+
+	public void ToggleDossier() {
+		if (dossierActive != true) {
+			dossierActive = true;
+		} else {
+			dossierActive = false;
+		}
+	}
 }
+
