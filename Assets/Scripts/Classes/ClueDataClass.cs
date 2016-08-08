@@ -15,9 +15,9 @@ public class ClueDataClass : ScriptableObject {
 
 	private void CreateClueString() {
 		if (perpTrait.traitBool == true) {
-			clueDossierEntry = clueSource.name + " at " + clueSource.gameObject.transform.position	 + " suggests that the perpetrator " + perpTrait.traitName;
+			clueDossierEntry = clueSource.name + " suggests that the perpetrator " + perpTrait.traitName;
 		} else {
-			clueDossierEntry = clueSource.name + " at " + clueSource.gameObject.transform.position + " had no information on the perpetrator";
+			clueDossierEntry = clueSource.name +  " had no information on the perpetrator";
 		}
 	}
 }

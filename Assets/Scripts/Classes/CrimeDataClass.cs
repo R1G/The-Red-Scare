@@ -7,6 +7,7 @@ public class CrimeDataClass : MonoBehaviour {
 	static int crimeNumber = 0;
 	public DossierDataClass dossier;
 	public List<ClueDataClass> crimeClues = new List<ClueDataClass> ();
+	public string crimeName;
 	//bool inProgress;
 
 	//string crimeType;
@@ -37,10 +38,9 @@ public class CrimeDataClass : MonoBehaviour {
 		//this.buildings = buildings;
 
 		GameObject building = buildings[Random.Range(0,buildings.Length)];
-		Debug.Log ("A crime has taken place at " + building.transform.position);
 		gameObject.transform.position = building.transform.position;
 		gameObject.transform.rotation = building.transform.rotation;
-
+		this.crimeName = "The " + building.GetComponent<BuildingScript>().buildingType + " " + crimeType;
 		StartCrime();
 		
 	}
@@ -75,7 +75,7 @@ public class CrimeDataClass : MonoBehaviour {
 		ClueDataClass crimeSceneClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
 		crimeSceneClue.Init (gameObject, GlobalDataScript.PickRandomTrait(perpetrator.GetComponent<AIScript>()));
 		crimeClues.Add (crimeSceneClue);
-		dossier.UpdateDossier (crimeSceneClue);
+		//dossier.UpdateDossier ();
 		perpetrator.GetComponent<ParticleSystem> ().maxParticles = 1000;
 		return crimeSceneClue;
 	}

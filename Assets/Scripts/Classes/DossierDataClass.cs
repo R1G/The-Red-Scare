@@ -10,15 +10,20 @@ public class DossierDataClass : ScriptableObject {
 
 	public void UpdateDossier(ClueDataClass clue) {
 		dossierLog.Add (clue.clueDossierEntry);
-		if (dossierLog.Count > 10) {
+		if (dossierLog.Count > 25) {
 			dossierLog.Remove(dossierLog[0]);
 		}
 	}
 
 	public string GetDossierText() {
 		string dossierOutput = "";
-		foreach (string dossierEntry in dossierLog) {
-			dossierOutput += dossierEntry;
+		foreach (CrimeDataClass crime in dossierCrimeEntries) {
+			dossierOutput += crime.crimeName;
+			dossierOutput += "\n";
+			foreach (ClueDataClass clue in crime.crimeClues) {
+				dossierOutput += clue.clueDossierEntry;
+				dossierOutput += "\n";
+			}
 			dossierOutput += "\n";
 		}
 		return dossierOutput;

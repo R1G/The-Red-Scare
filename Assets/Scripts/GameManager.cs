@@ -20,9 +20,10 @@ public class GameManager : MonoBehaviour {
 	List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
 
-	float crimeCooldown = 30f;
+	float crimeCooldown = 60f;
 	float cooldownRemaining = 0f;
 	public Text score;
+	public Vector2 scrollPosition;
 
 	public static int communistPower = 45;
 	int defaultCommunistPower = 20;
@@ -100,11 +101,12 @@ public class GameManager : MonoBehaviour {
 		if (cooldownRemaining <= 0) {
 			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
 			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
-			crimeData.dossier = dossier;
+			dossier.dossierCrimeEntries.Add (crimeData);
 			SetBuildings ();
-			crimeData.SetData ("communist", communists, communistPower, buildings);
-			communistPower += 20;
+			crimeData.SetData ("arson", communists, communistPower, buildings);
+			communistPower += 10;
 			cooldownRemaining = AdjustCrimeCooldown(crimeCooldown);
+			//dossier.UpdateDossier ();
 		}
 	}
 
@@ -131,7 +133,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		GUI.Label (new Rect (Screen.width/8, 2*Screen.height/3, 2*Screen.width/3, 2*Screen.height/3), dossierText);
+		scrollPosition = GUILayout.BeginScrollView (new Vector2(200,250), GUILayout.Width (450), GUILayout.Height (500));
+		GUILayout.Label (dossierText);
+		GUILayout.EndScrollView ();
 		if (dossierActive) {	
 			dossierText = dossier.GetDossierText ();
 		} else {
