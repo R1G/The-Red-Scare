@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
 	List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
 
-	float crimeCooldown = 60f;
+	float crimeCooldown = 10f;
 	float cooldownRemaining = 0f;
 	public Text score;
 	public Vector2 scrollPosition;
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour {
 			dossier.dossierCrimeEntries.Add (crimeData);
 			SetBuildings ();
 			crimeData.SetData ("arson", communists, communistPower, buildings);
-			communistPower += 10;
+			communistPower += 1;
 			cooldownRemaining = AdjustCrimeCooldown(crimeCooldown);
 			//dossier.UpdateDossier ();
 		}
