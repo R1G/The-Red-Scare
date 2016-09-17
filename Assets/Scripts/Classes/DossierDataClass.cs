@@ -10,9 +10,6 @@ public class DossierDataClass : ScriptableObject {
 
 	public void UpdateDossier(ClueDataClass clue) {
 		dossierLog.Add (clue.clueDossierEntry);
-		if (dossierLog.Count > 25) {
-			dossierLog.Remove(dossierLog[0]);
-		}
 	}
 
 	public string GetDossierText() {

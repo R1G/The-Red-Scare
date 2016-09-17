@@ -8,31 +8,36 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject citizen;
-	public GameObject crime;
 	public float detectiveSkill;
 	GameObject[] spawnPoints;
 	public DossierDataClass dossier;
-	public string dossierText;
 	public bool dossierActive;
-	public static int population = 20;
-
+	public static int population = 100;
+	public Text dossierText;
+	public GameObject arsonPrefab;
+	public GameObject robberyPrefab;
 	GameObject[] citizens = new GameObject[population];
 	List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
-
-	float crimeCooldown = 10f;
+	GameObject[] possibleCrimes = new GameObject[2];
+	float crimeCooldown = 120f;
 	float cooldownRemaining = 0f;
 	public Text score;
 	public Vector2 scrollPosition;
+	public Canvas dossierCanvas;
 
 	public static int communistPower = 45;
 	int defaultCommunistPower = 20;
 
+	public static GameObject currentPerpetrator;
+	public static CrimeDataClass currentCrime;
+
 	int communistLimit;
 
 	// TODO: put smarter code for determining how many communists there are at game start
-	//For example, there can nenver be more than 10 or less than 2
+	//For example, there can never be more than 10 or less than 2
 	void Start() {
+		dossierCanvas.enabled = false;
 		dossierActive = false;
 		dossier = ScriptableObject.CreateInstance<DossierDataClass> ();
 		score.text = communistPower.ToString ();
@@ -43,6 +48,9 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < population; i++) {
 			int spawnPointChoice = Random.Range(0, 16);
 			citizens[i] =(GameObject) Instantiate (citizen, spawnPoints[spawnPointChoice].transform.position, Quaternion.identity);
+
+			possibleCrimes [0] = robberyPrefab;
+			possibleCrimes [1] = arsonPrefab;
 		}
 
 		FindCommunists ();
@@ -50,6 +58,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Update(){
+		PrintDossier ();
 		//The communist limit is determined by the communist power divided by five, as can be seen here
 		//This determines the real number of citizens who are also communists
 		communistLimit = communistPower / 5;
@@ -99,14 +108,15 @@ public class GameManager : MonoBehaviour {
 	void HandleCrimes(){
 		cooldownRemaining -= Time.deltaTime;
 		if (cooldownRemaining <= 0) {
-			GameObject newCrime = (GameObject) Instantiate (crime, Vector3.zero, Quaternion.identity);
+			GameObject chosenCrime = possibleCrimes [Random.Range (0, possibleCrimes.Length)];
+			GameObject newCrime = (GameObject) Instantiate (chosenCrime, new Vector3(0f,.2f,0f), Quaternion.identity);
 			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();
+			crimeData.SetData (chosenCrime.name, communists, communistPower, buildings);
 			dossier.dossierCrimeEntries.Add (crimeData);
 			SetBuildings ();
-			crimeData.SetData ("arson", communists, communistPower, buildings);
 			communistPower += 1;
 			cooldownRemaining = AdjustCrimeCooldown(crimeCooldown);
-			//dossier.UpdateDossier ();
+			currentCrime = crimeData;
 		}
 	}
 
@@ -132,14 +142,13 @@ public class GameManager : MonoBehaviour {
 		return cooldown;
 	}
 
-	void OnGUI() {
-		scrollPosition = GUILayout.BeginScrollView (new Vector2(200,250), GUILayout.Width (450), GUILayout.Height (500));
-		GUILayout.Label (dossierText);
-		GUILayout.EndScrollView ();
+	public void PrintDossier() {
 		if (dossierActive) {	
-			dossierText = dossier.GetDossierText ();
+			dossierText.text = dossier.GetDossierText ();
+			dossierCanvas.enabled = true;
 		} else {
-			dossierText = "";
+			dossierText.text = "";
+			dossierCanvas.enabled = false;
 		}
 	}
 

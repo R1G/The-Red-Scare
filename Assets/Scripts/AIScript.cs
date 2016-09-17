@@ -16,6 +16,7 @@ public class AIScript : MonoBehaviour {
 
 	public TraitDataClass hat, glasses, hair, coat; 
 	public GameObject hatGO, glassesGO, hairGO, coatGO;
+	public ParticleSystem ps;
 
 	//state variables
 	bool isSelected = false;
@@ -47,6 +48,7 @@ public class AIScript : MonoBehaviour {
 	private RaycastHit hit;
 
 	void Start() {
+		gameManager = GameObject.FindGameObjectWithTag ("GameManager");
 		//instantiating and initializing 4 traits
 		hat = ScriptableObject.CreateInstance<TraitDataClass>();
 		coat = ScriptableObject.CreateInstance<TraitDataClass>();
@@ -57,6 +59,8 @@ public class AIScript : MonoBehaviour {
 		hair.Init ("has a beard", GlobalDataScript.GetRandomBool(), hairGO);
 		coat.Init ("wears a thick coat", GlobalDataScript.GetRandomBool(), coatGO);
 
+		ps = GetComponent<ParticleSystem> ();
+
 		guiActive = false;
 		gameObject.name = GlobalDataScript.GenerateName ();
 
@@ -66,7 +70,8 @@ public class AIScript : MonoBehaviour {
 		
 		anim = GetComponent<Animator> ();
 		gameObject.tag = "Citizen";
-
+		ps.maxParticles = communism - 5;
+		ps.startLifetime = .5f;
 		agent = GetComponent<NavMeshAgent> ();
 		agent.speed = walkSpeed;
 
@@ -172,14 +177,14 @@ public class AIScript : MonoBehaviour {
 		//crimesCommitted.Add (crimeScript.GetCrimeNumber ());
 	}
 
-	public void TurnInvisible() {
+	void TurnInvisible() {
 		civCollider.enabled = false;
 		civHeadRenderer.enabled = false;
 		civBodyRenderer.enabled = false;
 		gameObject.GetComponent<ParticleSystem> ().maxParticles = 0;
 	}
 
-	public void TurnVisible() {
+	void TurnVisible() {
 		civCollider.enabled = true;
 		civHeadRenderer.enabled = true;
 		civBodyRenderer.enabled = true;
@@ -198,7 +203,7 @@ public class AIScript : MonoBehaviour {
 		return result;
 	}
 
-	public void Arrest() {
+	void Arrest() {
 		if (communism > 5) {
 			Debug.Log ("You have arrested a communist!");
 			GameManager.communistPower -= 10;
@@ -210,11 +215,28 @@ public class AIScript : MonoBehaviour {
 		guiActive = false;
 	}
 
-	public void AnswerQuestion() {
-		if (honesty >= 8) {
-			Debug.Log (communism);
+	void AnswerQuestion() {
+		int answerChoice = honesty * communism - communism - 45;
+		if (answerChoice > 15) {
+			if (answerChoice > 30) {
+				//name the perpetrator of the current crime
+			} else {
+			//give up a random trait pertaining to the current crime
+			}
 		} else {
-			Debug.Log (3);
+			
 		}
+		Debug.Log (gameObject.name + " was interrogated");
+		ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
+		witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
+		GameManager.currentCrime.crimeClues.Add (witnessClue);
+		Debug.Log (witnessClue.clueDossierEntry);
+		Debug.Log (GameManager.currentCrime.crimeName);
+	}
+
+	public void IncreaseEmission() {
+		ps.startLifetime += 5f;
+		ps.maxParticles += 100;
+		communism += 1;
 	}
 }

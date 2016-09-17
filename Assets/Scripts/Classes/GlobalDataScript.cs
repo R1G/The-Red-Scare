@@ -10,12 +10,15 @@ public class GlobalDataScript : MonoBehaviour {
 	public static Vector3[] wayPoints; 
 	public static GameObject[] wayPointObjs = GameObject.FindGameObjectsWithTag("WayPoint");
 	public static GameObject[] buildings;
+	public static List<GameObject> possibleCrimes = new List<GameObject>();
 
 
 	static void Awake() {
 		for (int i = 0; i < wayPointObjs.Length; i++) {
 			wayPoints [i] = wayPointObjs [i].transform.position;
 		}
+		possibleCrimes.Add (Resources.Load ("RobberyPrefab") as GameObject);
+		possibleCrimes.Add (Resources.Load ("ArsonPrefab") as GameObject);
 	}
 
 	static void Start() {
@@ -49,6 +52,5 @@ public class GlobalDataScript : MonoBehaviour {
 		TraitDataClass[] traits = { perpScript.coat, perpScript.glasses, perpScript.hat, perpScript.hair };
 		TraitDataClass traitChoice = traits [traitNumber];
 		return traitChoice;
-
 	}
 }

@@ -54,7 +54,9 @@ public class CrimeDataClass : MonoBehaviour {
 	}
 
 	GameObject SelectPerpetrator(){
-		return perpetrators [Random.Range (0, perpetrators.Count)];
+		GameObject perp = perpetrators [Random.Range (0, perpetrators.Count)];
+		GameManager.currentPerpetrator = perp;
+		return perp;
 	}
 
 	public void CrimeActive(){
@@ -68,7 +70,6 @@ public class CrimeDataClass : MonoBehaviour {
 
 	public void CrimeDeactive(){
 		Debug.Log ("Investigating scene");
-		//Destroy (gameObject.GetComponent<Collider>());
 	}
 
 	public ClueDataClass CreateClue() {
@@ -78,5 +79,13 @@ public class CrimeDataClass : MonoBehaviour {
 		//dossier.UpdateDossier ();
 		perpetrator.GetComponent<ParticleSystem> ().maxParticles = 1000;
 		return crimeSceneClue;
+	}
+
+	void OnTriggerExit(Collider other) {
+		Debug.Log ("Object has entered a crime scene");
+		if (other.gameObject.tag == "Citizen") {
+			Debug.Log ("A witness has been added");
+			other.gameObject.GetComponent<AIScript> ().IncreaseEmission ();
+		}
 	}
 }
