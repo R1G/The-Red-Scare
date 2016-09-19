@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
 	public Vector2 scrollPosition;
 	public Canvas dossierCanvas;
 
-	public static int communistPower = 45;
+	public static int communistPower = 40;
 	int defaultCommunistPower = 20;
 
 	public static GameObject currentPerpetrator;
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour {
 			crimeData.SetData (chosenCrime.name, communists, communistPower, buildings);
 			dossier.dossierCrimeEntries.Add (crimeData);
 			SetBuildings ();
-			communistPower += 1;
+			communistPower += 10;
 			cooldownRemaining = AdjustCrimeCooldown(crimeCooldown);
 			currentCrime = crimeData;
 		}

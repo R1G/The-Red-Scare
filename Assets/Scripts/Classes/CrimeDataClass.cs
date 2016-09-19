@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class CrimeDataClass : MonoBehaviour {
 
 	static int crimeNumber = 0;
+	int witnessNumber = 0;
 	public DossierDataClass dossier;
 	public List<ClueDataClass> crimeClues = new List<ClueDataClass> ();
 	public string crimeName;
@@ -78,14 +79,18 @@ public class CrimeDataClass : MonoBehaviour {
 		crimeClues.Add (crimeSceneClue);
 		//dossier.UpdateDossier ();
 		perpetrator.GetComponent<ParticleSystem> ().maxParticles = 1000;
+		GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (2);
+		Debug.Log (GameManager.currentPerpetrator.name);
 		return crimeSceneClue;
 	}
 
 	void OnTriggerExit(Collider other) {
 		Debug.Log ("Object has entered a crime scene");
-		if (other.gameObject.tag == "Citizen") {
+		if (other.gameObject.tag == "Citizen" && witnessNumber <= 30) {
 			Debug.Log ("A witness has been added");
-			other.gameObject.GetComponent<AIScript> ().IncreaseEmission ();
+			witnessNumber++;
+			other.gameObject.GetComponent<AIScript> ().IncreaseEmission (2);
+			other.gameObject.GetComponent<AIScript> ().isWitness = true;
 		}
 	}
 }

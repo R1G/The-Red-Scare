@@ -35,6 +35,8 @@ public class AIScript : MonoBehaviour {
 
 	List <int> crimesCommitted = new List<int>();
 	List <int> crimesWitnessed; 
+	//this is a temporary solution; the witness list above should work better later on
+	public bool isWitness;
 
 	MeshRenderer civHeadRenderer;
 	MeshRenderer civBodyRenderer;
@@ -48,6 +50,7 @@ public class AIScript : MonoBehaviour {
 	private RaycastHit hit;
 
 	void Start() {
+		isWitness = false;
 		gameManager = GameObject.FindGameObjectWithTag ("GameManager");
 		//instantiating and initializing 4 traits
 		hat = ScriptableObject.CreateInstance<TraitDataClass>();
@@ -71,7 +74,7 @@ public class AIScript : MonoBehaviour {
 		anim = GetComponent<Animator> ();
 		gameObject.tag = "Citizen";
 		ps.maxParticles = communism - 5;
-		ps.startLifetime = .5f;
+		ps.startLifetime = .1f;
 		agent = GetComponent<NavMeshAgent> ();
 		agent.speed = walkSpeed;
 
@@ -217,26 +220,42 @@ public class AIScript : MonoBehaviour {
 
 	void AnswerQuestion() {
 		int answerChoice = honesty * communism - communism - 45;
+		if (isWitness) {
+			answerChoice += 10;
+		}
 		if (answerChoice > 15) {
 			if (answerChoice > 30) {
-				//name the perpetrator of the current crime
+				ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
+				witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
+				GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (3);
+				witnessClue.clueDossierEntry = name + " accuses " + GameManager.currentPerpetrator.name + " of committing the " + GameManager.currentCrime.crimeName;
+				GameManager.currentCrime.crimeClues.Add (witnessClue);
+
 			} else {
-			//give up a random trait pertaining to the current crime
+				Debug.Log (gameObject.name + " was interrogated");
+				ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
+				witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
+				GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (1);
+				GameManager.currentCrime.crimeClues.Add (witnessClue);
+				Debug.Log (witnessClue.clueDossierEntry);
+				Debug.Log (GameManager.currentCrime.crimeName);
 			}
 		} else {
-			
+			Debug.Log (gameObject.name + " was interrogated");
+			ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
+			witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
+			GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (0);
+			witnessClue.clueDossierEntry = name + " doesn't appear to know anything at all";
+			GameManager.currentCrime.crimeClues.Add (witnessClue);
+			Debug.Log (witnessClue.clueDossierEntry);
+			Debug.Log (GameManager.currentCrime.crimeName);
 		}
-		Debug.Log (gameObject.name + " was interrogated");
-		ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
-		witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
-		GameManager.currentCrime.crimeClues.Add (witnessClue);
-		Debug.Log (witnessClue.clueDossierEntry);
-		Debug.Log (GameManager.currentCrime.crimeName);
+
 	}
 
-	public void IncreaseEmission() {
-		ps.startLifetime += 5f;
-		ps.maxParticles += 100;
-		communism += 1;
+	public void IncreaseEmission(int emissionLvl) {
+		ps.startLifetime += .25f*emissionLvl;
+		ps.maxParticles += 10*emissionLvl;
+		communism += 1*emissionLvl;
 	}
 }
