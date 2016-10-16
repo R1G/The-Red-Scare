@@ -88,7 +88,6 @@ public class AIScript : MonoBehaviour {
 		 if (commitingCrime) {
 			if (agent.remainingDistance <= 1f) {
 				commitingCrime = false;
-				//currentCrimeScript.CrimeActive ();
 				currentCrimeScript = null;
 			}
 		} else {
@@ -180,13 +179,6 @@ public class AIScript : MonoBehaviour {
 		//crimesCommitted.Add (crimeScript.GetCrimeNumber ());
 	}
 
-	void TurnInvisible() {
-		civCollider.enabled = false;
-		civHeadRenderer.enabled = false;
-		civBodyRenderer.enabled = false;
-		gameObject.GetComponent<ParticleSystem> ().maxParticles = 0;
-	}
-
 	void TurnVisible() {
 		civCollider.enabled = true;
 		civHeadRenderer.enabled = true;
@@ -207,27 +199,29 @@ public class AIScript : MonoBehaviour {
 	}
 
 	void Arrest() {
-		if (communism > 5) {
+		if (GameManager.currentPerpetrator = gameObject) {
+			Debug.Log ("You have arrested the perpetrator");
+			GameManager.communistPower -= 20;
+		} else if (communism > 7) {
 			Debug.Log ("You have arrested a communist!");
 			GameManager.communistPower -= 10;
 		} else {
 			Debug.Log ("You have arrested an innocent citizen!");
 			GameManager.communistPower += 5;
-		}
-		TurnInvisible ();
-		guiActive = false;
+			}
+		GameManager.communists.Remove (gameObject);
+		Destroy (gameObject);
 	}
 
 	void AnswerQuestion() {
 		int answerChoice = honesty * communism - communism - 45;
 		if (isWitness) {
-			answerChoice += 10;
 		}
-		if (answerChoice > 15) {
-			if (answerChoice > 30) {
+		if (isWitness) {
+			if (answerChoice > 20) {
 				ClueDataClass witnessClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
 				witnessClue.Init (gameObject, GlobalDataScript.PickRandomTrait (GameManager.currentPerpetrator.GetComponent<AIScript> ()));
-				GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (3);
+				GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (10);
 				witnessClue.clueDossierEntry = name + " accuses " + GameManager.currentPerpetrator.name + " of committing the " + GameManager.currentCrime.crimeName;
 				GameManager.currentCrime.crimeClues.Add (witnessClue);
 

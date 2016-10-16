@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject arsonPrefab;
 	public GameObject robberyPrefab;
 	GameObject[] citizens = new GameObject[population];
-	List<GameObject> communists = new List<GameObject> (); 
+	public static List<GameObject> communists = new List<GameObject> (); 
 	GameObject[] buildings;
 	GameObject[] possibleCrimes = new GameObject[2];
 	float crimeCooldown = 120f;
