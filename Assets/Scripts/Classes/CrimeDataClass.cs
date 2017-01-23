@@ -9,7 +9,8 @@ public class CrimeDataClass : MonoBehaviour {
 	public DossierDataClass dossier;
 	public List<ClueDataClass> crimeClues = new List<ClueDataClass> ();
 	public string crimeName;
-	//bool inProgress;
+	bool inProgress = false;
+	public bool solved = false;
 
 	//string crimeType;
 	List<GameObject> perpetrators;
@@ -21,6 +22,7 @@ public class CrimeDataClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		crimeNumber++;
+		inProgress = false;
 	}
 	
 	// Update is called once per frame
@@ -65,19 +67,25 @@ public class CrimeDataClass : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
-		CrimeDeactive ();
-		CreateClue ();
+		if (inProgress == false) {
+			CreateClue ();
+			CrimeDeactive ();
+			inProgress = true;
+		} else {
+			Debug.Log ("You have already searched the crime scene");
+		}
 	}
 
 	public void CrimeDeactive(){
 		Debug.Log ("Investigating scene");
+		inProgress = false;
+
 	}
 
 	public ClueDataClass CreateClue() {
 		ClueDataClass crimeSceneClue = ScriptableObject.CreateInstance ("ClueDataClass") as ClueDataClass;
 		crimeSceneClue.Init (gameObject, GlobalDataScript.PickRandomTrait(perpetrator.GetComponent<AIScript>()));
 		crimeClues.Add (crimeSceneClue);
-		//dossier.UpdateDossier ();
 		perpetrator.GetComponent<ParticleSystem> ().maxParticles = 1000;
 		GameManager.currentPerpetrator.GetComponent<AIScript> ().IncreaseEmission (2);
 		Debug.Log (GameManager.currentPerpetrator.name);

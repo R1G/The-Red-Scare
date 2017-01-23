@@ -62,8 +62,6 @@ public class GameManager : MonoBehaviour {
 		//The communist limit is determined by the communist power divided by five, as can be seen here
 		//This determines the real number of citizens who are also communists
 		communistLimit = communistPower / 5;
-		BalanceCommunists();
-
 		HandleCrimes ();
 		UpdateScore ();
 	}
@@ -108,6 +106,8 @@ public class GameManager : MonoBehaviour {
 	void HandleCrimes(){
 		cooldownRemaining -= Time.deltaTime;
 		if (cooldownRemaining <= 0) {
+			BalanceCommunists();
+			dossier.dossierCrimeEntries.Remove (currentCrime);
 			GameObject chosenCrime = possibleCrimes [Random.Range (0, possibleCrimes.Length)];
 			GameObject newCrime = (GameObject) Instantiate (chosenCrime, new Vector3(0f,.2f,0f), Quaternion.identity);
 			CrimeDataClass crimeData = newCrime.GetComponent<CrimeDataClass>();

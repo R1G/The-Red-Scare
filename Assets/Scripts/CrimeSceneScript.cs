@@ -35,7 +35,7 @@ public class CrimeSceneScript : MonoBehaviour {
 		this.perpetrators = perpetrators;
 		this.communistPower = communistPower;
 		this.buildings = buildings;
-
+		this.name = "Crime Scene";
 
 		//Debug.Log (this.buildings.Length);
 		building = buildings[Random.Range(0,buildings.Length)];
